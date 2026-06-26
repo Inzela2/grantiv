@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grantiv</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f5f7;--surface:#ffffff;--surface-2:#fafafc;--sidebar:#fbfbfd;
+  --ink:#1d1d1f;--ink-2:#515154;--ink-3:#86868b;
+  --line:rgba(0,0,0,.09);--line-2:rgba(0,0,0,.14);
+  --accent:#0066cc;--accent-2:#0a4f9e;--accent-soft:#eaf2fc;
+  --ok:#1d7a4d;--ok-soft:#eef6f0;--ok-line:rgba(29,122,77,.18);
+  --warn:#946400;--warn-soft:#fcf5e6;--warn-line:rgba(148,100,0,.2);
+  --stop:#c0362c;--stop-soft:#fcefee;--stop-line:rgba(192,54,44,.2);
+  --ink2:var(--ink-2);--ink3:var(--ink-3);--ink4:#b0b0b6;
+  --paper:var(--bg);--paper2:var(--surface-2);--paper3:#ececed;
+  --border:var(--line);--border2:var(--line-2);
+  --sage:var(--ok);--sage-l:var(--ok-soft);--sage-t:var(--ok);
+  --amber:var(--warn);--amber-l:var(--warn-soft);--amber-t:var(--warn);
+  --red:var(--stop);--red-l:var(--stop-soft);--red-t:var(--stop);
+  --blue:var(--accent);--blue-l:var(--accent-soft);--blue-t:var(--accent-2);
+  --primary:var(--accent);--primary-l:var(--accent-soft);--primary-t:var(--accent-2);
+  --r:8px;--rl:14px;--rxl:18px;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --serif:var(--sans);--mono:'SF Mono',ui-monospace,'IBM Plex Mono',Menlo,monospace;
+  --shadow-1:0 1px 2px rgba(0,0,0,.04),0 1px 1px rgba(0,0,0,.03);
+  --shadow-2:0 4px 16px rgba(0,0,0,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:-.006em}
+.tnum{font-variant-numeric:tabular-nums}
+
+.app{display:grid;grid-template-columns:252px 1fr;min-height:100vh}
+.sb{background:var(--sidebar);border-right:1px solid var(--line);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;scrollbar-width:none}
+.sb::-webkit-scrollbar{display:none}
+.main{overflow-y:auto;min-height:100vh;background:var(--bg)}
+.main-inner{padding:2.25rem 2.5rem 5rem;max-width:940px;margin:0 auto}
+
+.sb-brand{padding:1.15rem 1.25rem .35rem;display:flex;align-items:center;gap:.55rem}
+.sb-logo{font-size:18px;font-weight:600;letter-spacing:-.02em;color:var(--ink);display:flex;align-items:center}
+.sb-logo-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:3px;margin-top:7px}
+.sb-inst{font-size:11px;color:var(--ink-3);padding:0 1.25rem .5rem;font-weight:450}
+
+.role-seg{margin:.5rem 1rem .35rem;background:#ececef;border-radius:9px;padding:3px;display:flex;gap:2px}
+.role-seg button{flex:1;border:none;background:none;font:inherit;font-size:12px;font-weight:500;color:var(--ink-2);padding:.35rem 0;border-radius:7px;cursor:pointer;transition:.15s}
+.role-seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1),0 0 0 .5px rgba(0,0,0,.04)}
+
+.hours{margin:.55rem 1rem .15rem;background:var(--accent-soft);border:1px solid rgba(0,102,204,.14);border-radius:11px;padding:.6rem .8rem;display:flex;align-items:center;gap:.7rem}
+.hours .ic{width:30px;height:30px;border-radius:8px;background:rgba(0,102,204,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hours .ic svg{width:16px;height:16px;stroke:var(--accent)}
+.hs-num{font-size:18px;font-weight:600;color:var(--accent-2);line-height:1;letter-spacing:-.02em}
+.hs-label{font-size:10.5px;color:var(--ink-3);line-height:1.35;margin-top:2px}
+.hs-label b{color:var(--ink-2);font-weight:600}
+.hs-sep{width:1px;align-self:stretch;background:rgba(0,102,204,.16);margin:.1rem 0}
+
+.nav-sec{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);padding:1rem 1.4rem .3rem}
+.nav-item{display:flex;align-items:center;gap:9px;margin:1px .6rem;padding:.4rem .75rem;border-radius:8px;cursor:pointer;font-size:13px;font-weight:450;color:var(--ink-2);transition:background .12s,color .12s;line-height:1.25}
+.nav-item:hover{background:rgba(0,0,0,.04)}
+.nav-item.active{background:var(--accent-soft);color:var(--accent-2);font-weight:500}
+.nav-item svg{width:15px;height:15px;flex-shrink:0;stroke:currentColor;stroke-width:1.6;fill:none;opacity:.8}
+.nav-item.active svg{opacity:1}
+.nav-badge{margin-left:auto;min-width:17px;height:17px;padding:0 5px;border-radius:9px;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.nav-badge.stop{background:var(--stop);color:#fff}
+.nav-badge.warn{background:var(--warn);color:#fff}
+.nav-check{margin-left:auto;color:var(--ok);font-size:12px}
+
+.sb-foot{margin-top:auto;padding:.7rem .9rem .9rem;border-top:1px solid var(--line);display:flex;align-items:center;gap:.6rem}
+.sb-av{width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-uname{font-size:12.5px;font-weight:500;color:var(--ink);line-height:1.2}
+.sb-uinst{font-size:11px;color:var(--ink-3);line-height:1.2}
+.sb-uinfo{flex:1;min-width:0}
+.sb-gear{background:none;border:none;color:var(--ink-3);cursor:pointer;padding:5px;border-radius:7px;display:flex}
+.sb-gear:hover{background:rgba(0,0,0,.05);color:var(--ink)}
+.sb-gear svg{width:16px;height:16px}
+
+.page{display:none;animation:fade .35s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+.ph{margin-bottom:1.5rem}
+.ph-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.ph-eyebrow{font-size:12px;font-weight:500;color:var(--accent);margin-bottom:.3rem;letter-spacing:-.01em}
+.ph-title{font-size:28px;font-weight:600;letter-spacing:-.025em;line-height:1.12;color:var(--ink)}
+.ph-sub{font-size:14.5px;color:var(--ink-2);margin-top:.45rem;max-width:560px;line-height:1.5}
+.deadline-chip{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:.4rem .85rem;font-size:12.5px;color:var(--ink-2);box-shadow:var(--shadow-1);font-weight:450;white-space:nowrap}
+.deadline-chip b{color:var(--stop);font-weight:600}
+.deadline-chip .dot{width:6px;height:6px;border-radius:50%;background:var(--stop)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--rl);padding:1.35rem 1.4rem;margin-bottom:1rem;box-shadow:var(--shadow-1)}
+.card-title{font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.card-sub{font-size:13px;color:var(--ink-3);margin-bottom:1rem;line-height:1.45;margin-top:.15rem}
+
+.catch{display:flex;gap:.95rem;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:var(--rl);padding:1.05rem 1.15rem;margin-bottom:.7rem;box-shadow:var(--shadow-1);position:relative;overflow:hidden}
+.catch::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px}
+.catch.stop::before{background:var(--stop)}
+.catch.warn::before{background:var(--warn)}
+.catch.ok::before{background:var(--ok)}
+.catch-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.catch-ic svg{width:18px;height:18px;stroke-width:2.2;fill:none}
+.catch.stop .catch-ic{background:var(--stop-soft)}.catch.stop .catch-ic svg{stroke:var(--stop)}
+.catch.warn .catch-ic{background:var(--warn-soft)}.catch.warn .catch-ic svg{stroke:var(--warn)}
+.catch.ok .catch-ic{background:var(--ok-soft)}.catch.ok .catch-ic svg{stroke:var(--ok)}
+.catch-body{flex:1;min-width:0}
+.catch-title{font-size:14.5px;font-weight:600;color:var(--ink);letter-spacing:-.01em;margin-bottom:.2rem}
+.catch-desc{font-size:13px;color:var(--ink-2);line-height:1.5}
+.catch-meta{font-size:11.5px;color:var(--ink-3);margin-top:.4rem}
+.catch-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.7rem}
+
+.stats{display:grid;gap:.7rem;margin-bottom:1rem}
+.stats-4{grid-template-columns:repeat(4,1fr)}
+.stats-3{grid-template-columns:repeat(3,1fr)}
+.stats-2{grid-template-columns:repeat(2,1fr)}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--rl);padding:1rem 1.1rem;box-shadow:var(--shadow-1)}
+.stat-n{font-size:26px;font-weight:600;letter-spacing:-.03em;color:var(--ink);line-height:1;font-variant-numeric:tabular-nums}
+.stat-l{font-size:12px;color:var(--ink-3);line-height:1.35;margin-top:.4rem}
+.win-stat{background:var(--accent);border-color:var(--accent)}
+.win-stat .stat-n{color:#fff}.win-stat .stat-l{color:rgba(255,255,255,.72)}
+
+.ring-card{display:flex;align-items:center;gap:1.5rem}
+.ring{position:relative;width:108px;height:108px;flex-shrink:0}
+.ring svg{transform:rotate(-90deg)}
+.ring-val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring-num{font-size:30px;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.ring-den{font-size:11px;color:var(--ink-3);margin-top:1px}
+.ring-meta{flex:1}
+.ring-meta h4{font-size:14.5px;font-weight:600;margin-bottom:.3rem}
+.ring-meta p{font-size:13px;color:var(--ink-2);line-height:1.5}
+
+.qmetrics{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-top:.2rem}
+.qs{background:var(--surface);border:1px solid var(--line);border-radius:var(--rl);padding:1rem 1.05rem;box-shadow:var(--shadow-1)}
+.qs-label{font-size:11.5px;color:var(--ink-3);font-weight:500;margin-bottom:.5rem}
+.qs-num{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:.55rem;font-variant-numeric:tabular-nums}
+.qs-bar{height:5px;background:#ececef;border-radius:3px;overflow:hidden;margin-bottom:.6rem}
+.qs-fill{height:100%;border-radius:3px}
+.qs-note{font-size:12px;color:var(--ink-2);line-height:1.5}
+
+.pill{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:999px;font-size:11.5px;font-weight:500;white-space:nowrap}
+.p-sage{background:var(--ok-soft);color:var(--ok)}
+.p-amber{background:var(--warn-soft);color:var(--warn)}
+.p-red{background:var(--stop-soft);color:var(--stop)}
+.p-blue{background:var(--accent-soft);color:var(--accent-2)}
+.p-gray{background:#ececed;color:var(--ink-2)}
+
+.btn{display:inline-flex;align-items:center;gap:6px;padding:.5rem .95rem;border-radius:var(--r);font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-family:var(--sans);transition:.12s;letter-spacing:-.01em}
+.btn:hover{background:#f3f3f5}
+.btn:active{transform:scale(.985)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary,.btn-sage{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover,.btn-sage:hover{background:var(--accent-2)}
+.btn-red{background:var(--stop);color:#fff;border-color:var(--stop)}
+.btn-sm{padding:.36rem .7rem;font-size:12.5px}
+.btn-xs{padding:.24rem .6rem;font-size:12px;border-radius:6px}
+.btn-ghost{border-color:transparent;background:transparent;color:var(--accent);padding-left:.5rem;padding-right:.5rem}
+.btn-ghost:hover{background:var(--accent-soft)}
+
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;font-size:11.5px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);padding:.7rem .9rem;border-bottom:1px solid var(--line)}
+.tbl td{padding:.8rem .9rem;border-bottom:1px solid var(--line);font-size:13.5px;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl-hover tbody tr{transition:background .1s}
+.tbl-hover tbody tr:hover td{background:var(--surface-2);cursor:pointer}
+.tbl-wrap{background:var(--surface);border:1px solid var(--line);border-radius:var(--rl);overflow:hidden;box-shadow:var(--shadow-1);margin-bottom:1rem}
+.tbl-wrap .tbl th{padding-left:1.1rem;padding-right:1.1rem}
+.tbl-wrap .tbl td{padding-left:1.1rem;padding-right:1.1rem}
+
+label{font-size:12.5px;font-weight:500;color:var(--ink-2);display:block;margin-bottom:5px;letter-spacing:-.01em}
+input,select,textarea{width:100%;border:1px solid var(--line-2);border-radius:var(--r);padding:.55rem .75rem;font-size:13.5px;font-family:var(--sans);color:var(--ink);background:var(--surface);outline:none;transition:border-color .15s,box-shadow .15s;letter-spacing:-.006em}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(0,102,204,.12)}
+textarea{resize:vertical;line-height:1.6}
+select{-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2386868b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .75rem center;padding-right:1.9rem}
+.field{margin-bottom:.85rem}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+
+.out-wrap{margin-bottom:.75rem}
+.out-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.out-label{font-size:12px;font-weight:600;color:var(--ink-2);letter-spacing:-.01em}
+.out-meta{font-size:12px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.char-ok{color:var(--ok)}.char-near{color:var(--warn)}.char-over{color:var(--stop)}
+.out-box{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--rl);padding:1.15rem 1.3rem;font-size:13.5px;line-height:1.75;color:var(--ink);white-space:pre-wrap;min-height:160px;font-family:var(--sans)}
+.out-box.placeholder{color:var(--ink-3)}
+.out-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:.6rem}
+.loading{display:flex;align-items:center;gap:9px;color:var(--ink-3);font-size:13.5px;padding:.5rem 0}
+.spin{width:15px;height:15px;border:2px solid var(--line-2);border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite;flex-shrink:0}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+.note{display:flex;gap:.65rem;align-items:flex-start;border-radius:var(--rl);padding:.8rem 1rem;font-size:13px;line-height:1.5;margin-bottom:1rem}
+.note svg{width:17px;height:17px;flex-shrink:0;margin-top:1px;stroke-width:2;fill:none}
+.note.info{background:var(--accent-soft);color:var(--accent-2)}.note.info svg{stroke:var(--accent-2)}
+.note.warn{background:var(--warn-soft);color:var(--warn)}.note.warn svg{stroke:var(--warn)}
+.note.ok{background:var(--ok-soft);color:var(--ok)}.note.ok svg{stroke:var(--ok)}
+.note.stop{background:var(--stop-soft);color:var(--stop)}.note.stop svg{stroke:var(--stop)}
+.info{background:var(--accent-soft);border-radius:var(--r);padding:.7rem 1rem;font-size:13px;color:var(--accent-2);line-height:1.55;margin-bottom:1rem}
+.warn{background:var(--warn-soft);border-radius:var(--r);padding:.7rem 1rem;font-size:13px;color:var(--warn);line-height:1.55;margin-bottom:1rem}
+.success{background:var(--ok-soft);border-radius:var(--r);padding:.7rem 1rem;font-size:13px;color:var(--ok);line-height:1.55;margin-bottom:1rem}
+.danger{background:var(--stop-soft);border-radius:var(--r);padding:.7rem 1rem;font-size:13px;color:var(--stop);line-height:1.55;margin-bottom:1rem}
+.div{height:1px;background:var(--line);margin:1.1rem 0}
+
+.split{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.split-6040{display:grid;grid-template-columns:1.45fr 1fr;gap:1.1rem;align-items:start}
+
+.chips{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1rem}
+.chip{display:flex;gap:.6rem;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:.65rem .8rem;box-shadow:var(--shadow-1)}
+.chip .cdot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:5px}
+.chip .cdot.w{background:var(--warn)}
+.chip-text{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.chip-text b{color:var(--ink);font-weight:600}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;border-radius:var(--rl);overflow:hidden;border:1px solid var(--line);margin-bottom:1rem;box-shadow:var(--shadow-1)}
+.cc-head{padding:.85rem 1.1rem;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:.5rem;letter-spacing:-.01em}
+.cc-head.bad{background:var(--surface-2);color:var(--ink-2);border-bottom:1px solid var(--line)}
+.cc-head.good{background:var(--accent);color:#fff}
+.cc-head .tag{margin-left:auto;font-size:10.5px;font-weight:500;padding:1px 8px;border-radius:999px}
+.cc-head.bad .tag{background:#ececed;color:var(--ink-3)}
+.cc-head.good .tag{background:rgba(255,255,255,.2);color:#fff}
+.cc-body{padding:1.05rem 1.15rem;font-size:13px;line-height:1.7;min-height:230px}
+.cc-body.bad{color:var(--ink-3);background:var(--surface);border-right:1px solid var(--line)}
+.cc-body.good{color:var(--ink);background:var(--surface)}
+.cc-body b{color:var(--ink);font-weight:600}
+.cc-foot{padding:.75rem 1.1rem;font-size:12px;line-height:1.5}
+.cc-foot.bad{background:var(--surface-2);color:var(--ink-3);border-top:1px solid var(--line);border-right:1px solid var(--line)}
+.cc-foot.good{background:var(--ok-soft);color:var(--ok);border-top:1px solid var(--line)}
+
+.team-row{display:flex;align-items:center;gap:.9rem;padding:.85rem 0;border-bottom:1px solid var(--line)}
+.team-row:last-child{border-bottom:none}
+.av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0}
+
+.comp-item{display:flex;gap:.8rem;padding:.75rem 0;border-bottom:1px solid var(--line)}
+.comp-item:last-child{border-bottom:none}
+.comp-icon{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.ci-pass{background:var(--ok-soft);color:var(--ok)}
+.ci-warn{background:var(--warn-soft);color:var(--warn)}
+.comp-title{font-size:13.5px;font-weight:500;margin-bottom:2px}
+.comp-desc{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+.comp-fix{font-size:12px;color:var(--warn);background:var(--warn-soft);border-radius:6px;padding:3px 8px;margin-top:5px;display:inline-block;font-weight:500}
+
+.ver-row{display:flex;gap:.8rem;padding:.65rem 0;border-bottom:1px solid var(--line);align-items:flex-start}
+.ver-row:last-child{border-bottom:none}
+.ver-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.signoff-step{display:flex;gap:.9rem;margin-bottom:.85rem}
+.so-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.so-done{background:var(--ok-soft);color:var(--ok)}
+.so-pending{background:#ececed;color:var(--ink-3)}
+.so-title{font-size:13.5px;font-weight:500;margin-bottom:1px}
+.so-meta{font-size:12.5px;color:var(--ink-3)}
+
+.disc-card{border:1px solid var(--line);border-radius:var(--rl);padding:1.05rem 1.2rem;margin-bottom:.65rem;cursor:pointer;background:var(--surface);transition:.14s;box-shadow:var(--shadow-1)}
+.disc-card:hover{border-color:var(--line-2);box-shadow:var(--shadow-2);transform:translateY(-1px)}
+.disc-score{font-size:26px;font-weight:600;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1}
+
+.outcome-btn{display:inline-flex;align-items:center;gap:5px;padding:.3rem .7rem;border-radius:999px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--line-2);background:var(--surface)}
+.outcome-btn.funded{background:var(--ok-soft);border-color:var(--ok-line);color:var(--ok)}
+.outcome-btn.unsuccessful{background:var(--stop-soft);border-color:var(--stop-line);color:var(--stop)}
+
+.prog{height:5px;background:#ececef;border-radius:3px;overflow:hidden;flex:1;min-width:54px}
+.prog-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .4s}
+
+.mandate-step{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--line)}
+.mandate-step:last-child{border-bottom:none}
+.ms-num{width:30px;height:30px;border-radius:9px;background:var(--accent-soft);color:var(--accent-2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0;margin-top:1px}
+.ms-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.ms-desc{font-size:12.5px;color:var(--ink-2);line-height:1.55}
+
+.ci-row{display:grid;grid-template-columns:1fr 1fr 1.1fr 50px;gap:.6rem;align-items:end;margin-bottom:.6rem}
+
+#settings-modal{display:none}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.3);backdrop-filter:blur(3px);z-index:999}
+.modal-box{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--surface);border-radius:var(--rxl);box-shadow:0 24px 70px rgba(0,0,0,.3);width:400px;z-index:1000;overflow:hidden}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.3rem;border-bottom:1px solid var(--line)}
+.modal-title{font-size:15px;font-weight:600}
+.modal-close{background:none;border:none;font-size:17px;cursor:pointer;color:var(--ink-3);padding:2px 6px;border-radius:6px}
+.modal-close:hover{background:var(--surface-2)}
+.modal-body{padding:1.3rem}
+.modal-label{font-size:12.5px;font-weight:500;color:var(--ink-2);display:block;margin-bottom:6px}
+.modal-input{width:100%;border:1px solid var(--line-2);border-radius:var(--r);padding:.55rem .75rem;font-size:13px;font-family:var(--mono);color:var(--ink);background:var(--surface);outline:none}
+.modal-input:focus{border-color:var(--accent);box-shadow:0 0 0 3.5px rgba(0,102,204,.12)}
+.modal-note{font-size:12px;color:var(--ink-3);margin-top:.6rem;line-height:1.5}
+
+#login-screen{position:fixed;inset:0;z-index:9000;display:flex;background:var(--bg)}
+.login-left{width:42%;max-width:520px;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:space-between;padding:3.5rem 3.5rem 3rem}
+.login-right{flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;background:var(--bg)}
+.login-wordmark{font-size:30px;font-weight:600;letter-spacing:-.03em;color:var(--ink);display:flex;align-items:center}
+.login-wordmark-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-left:4px;margin-top:11px}
+.login-tagline{font-size:13px;color:var(--ink-3);margin-top:.6rem;font-weight:450}
+.login-headline{font-size:30px;font-weight:600;letter-spacing:-.03em;line-height:1.18;margin-top:2.8rem;color:var(--ink)}
+.login-headline span{color:var(--accent)}
+.login-stats{display:flex;gap:2rem;margin-top:2rem}
+.login-stat .n{font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--ink);font-variant-numeric:tabular-nums}
+.login-stat .l{font-size:12px;color:var(--ink-3);margin-top:2px;max-width:160px;line-height:1.4}
+.login-trust{margin-top:auto}
+.login-trust-label{font-size:11px;color:var(--ink-3);margin-bottom:.7rem;font-weight:450}
+.login-badges{display:flex;flex-wrap:wrap;gap:.4rem}
+.login-badge{background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:.35rem .7rem;font-size:11.5px;color:var(--ink-2)}
+.login-card{background:#fff;border:1px solid var(--line);border-radius:var(--rxl);box-shadow:var(--shadow-2);padding:2rem 2rem 1.85rem;width:100%;max-width:380px}
+.login-form-title{font-size:20px;font-weight:600;letter-spacing:-.02em;margin-bottom:.25rem}
+.login-form-sub{font-size:13.5px;color:var(--ink-3);margin-bottom:1.6rem}
+.login-field{margin-bottom:.9rem}
+.login-btn{width:100%;padding:.7rem 1rem;background:var(--accent);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;margin-top:.4rem;transition:background .15s}
+.login-btn:hover{background:var(--accent-2)}
+.login-divider{height:1px;background:var(--line);margin:1.3rem 0;position:relative}
+.login-divider::after{content:'or';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff;padding:0 .7rem;font-size:11.5px;color:var(--ink-3)}
+.login-sso-btn{width:100%;padding:.65rem 1rem;background:#fff;color:var(--ink-2);border:1px solid var(--line-2);border-radius:var(--r);font-size:13.5px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:.15s}
+.login-sso-btn:hover{background:var(--surface-2)}
+.login-meta{font-size:11.5px;color:var(--ink-3);margin-top:1.1rem;line-height:1.55;text-align:center}
+
+@keyframes countUp{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+.hs-num{animation:countUp .5s .3s both}
+
+/* ════ Landing (cold-visitor hero) ════ */
+#landing{position:fixed;inset:0;z-index:9000;background:var(--bg);overflow-y:auto}
+.lp-nav{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.2rem;background:rgba(245,245,247,.82);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+.lp-logo{font-size:18px;font-weight:600;letter-spacing:-.02em;display:flex;align-items:center;color:var(--ink)}
+.lp-logo .d{width:6px;height:6px;border-radius:50%;background:var(--accent);margin-left:3px;margin-top:7px}
+.lp-nav-right{display:flex;align-items:center;gap:1rem}
+.lp-tag{font-size:11.5px;font-weight:500;color:var(--ink-3);border:1px solid var(--line-2);border-radius:999px;padding:.25rem .7rem}
+.lp-hero{max-width:920px;margin:0 auto;padding:3.4rem 2.2rem 4rem;text-align:center}
+.lp-eyebrow{font-size:13px;font-weight:600;color:var(--accent);letter-spacing:-.01em;margin-bottom:1.1rem}
+.lp-h1{font-size:46px;font-weight:600;letter-spacing:-.035em;line-height:1.06;color:var(--ink)}
+.lp-h1 span{color:var(--accent)}
+.lp-sub{font-size:16.5px;line-height:1.55;color:var(--ink-2);max-width:640px;margin:1.3rem auto 0}
+.lp-impact{margin:2.5rem auto 0;max-width:560px;background:var(--surface);border:1px solid var(--line);border-radius:var(--rxl);box-shadow:var(--shadow-2);padding:2rem 2rem 1.7rem}
+.lp-impact-num{font-size:64px;font-weight:600;letter-spacing:-.045em;line-height:1;color:var(--accent);font-variant-numeric:tabular-nums}
+.lp-impact-cap{font-size:14px;color:var(--ink-2);line-height:1.5;margin-top:.7rem;max-width:420px;margin-left:auto;margin-right:auto}
+.lp-impact-cap b{color:var(--ink);font-weight:600}
+.lp-winbar{margin-top:1.4rem;text-align:left}
+.lp-winbar-row{display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem}
+.lp-winbar-lab{font-size:11.5px;color:var(--ink-3);width:118px;flex-shrink:0;text-align:right}
+.lp-winbar-track{flex:1;height:9px;background:#ececef;border-radius:5px;overflow:hidden}
+.lp-winbar-fill{height:100%;border-radius:5px}
+.lp-winbar-val{font-size:12px;font-weight:600;width:34px;font-variant-numeric:tabular-nums}
+.lp-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;max-width:760px;margin:2rem auto 0}
+.lp-stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--rl);padding:1rem .7rem;box-shadow:var(--shadow-1)}
+.lp-stat .n{font-size:23px;font-weight:600;letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+.lp-stat .l{font-size:11.5px;color:var(--ink-3);line-height:1.35;margin-top:.35rem}
+.lp-mandate{max-width:760px;margin:1.4rem auto 0;display:flex;gap:.8rem;align-items:flex-start;text-align:left;background:var(--warn-soft);border:1px solid var(--warn-line);border-radius:var(--rl);padding:1rem 1.15rem}
+.lp-mandate .live{display:flex;align-items:center;gap:7px;flex-shrink:0;margin-top:1px}
+.lp-mandate .blip{width:9px;height:9px;border-radius:50%;background:var(--warn);position:relative}
+.lp-mandate .blip::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--warn);opacity:.5;animation:blip 2s ease-out infinite}
+@keyframes blip{0%{transform:scale(.6);opacity:.6}100%{transform:scale(1.7);opacity:0}}
+.lp-mandate-txt{font-size:13px;color:var(--warn);line-height:1.5}
+.lp-mandate-txt b{font-weight:700}
+.lp-cta{margin-top:2.2rem;display:flex;flex-direction:column;align-items:center;gap:.8rem}
+.lp-cta-row{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
+.btn-lg{padding:.8rem 1.5rem;font-size:15px;border-radius:10px;font-weight:600}
+.lp-cta-note{font-size:12px;color:var(--ink-3)}
+.lp-trust{margin-top:2.6rem;border-top:1px solid var(--line);padding-top:1.6rem}
+.lp-trust-label{font-size:11.5px;color:var(--ink-3);margin-bottom:.8rem}
+.lp-trust-row{display:flex;flex-wrap:wrap;gap:.45rem;justify-content:center}
+.lp-trust-row span{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.4rem .8rem;font-size:12px;color:var(--ink-2)}
+
+/* ════ Toast ════ */
+#toast-host{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:12000;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
+.toast{display:flex;align-items:center;gap:9px;background:#1d1d1f;color:#fff;font-size:13px;font-weight:450;padding:.65rem 1rem;border-radius:11px;box-shadow:0 10px 30px rgba(0,0,0,.22);animation:toastIn .28s cubic-bezier(.2,.8,.3,1);max-width:90vw}
+.toast.out{animation:toastOut .25s ease forwards}
+.toast svg{width:16px;height:16px;flex-shrink:0;stroke:#5dd49a;stroke-width:2.4;fill:none}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateY(8px)}}
+
+/* ════ Demo cue ════ */
+.cue{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 9px;margin-left:.5rem;vertical-align:middle}
+.cue .pd{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:cuePulse 1.6s ease-in-out infinite}
+@keyframes cuePulse{0%,100%{opacity:1}50%{opacity:.35}}
+.try-band{display:flex;align-items:center;gap:.7rem;background:var(--accent-soft);border:1px solid rgba(0,102,204,.16);border-radius:var(--rl);padding:.7rem 1rem;margin-bottom:1rem;font-size:13px;color:var(--accent-2)}
+.try-band svg{width:16px;height:16px;stroke:var(--accent-2);stroke-width:2;fill:none;flex-shrink:0}
+.try-band b{font-weight:600}
+.pulse{animation:btnPulse 2.4s ease-in-out infinite}
+@keyframes btnPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,102,204,0)}50%{box-shadow:0 0 0 5px rgba(0,102,204,.18)}}
+
+/* ════ Institutional impact band (RO overview) ════ */
+.impact-band{background:linear-gradient(135deg,#0a4f9e,#0066cc);border-radius:var(--rxl);padding:1.6rem 1.7rem;color:#fff;margin-bottom:1rem;box-shadow:0 8px 30px rgba(0,102,204,.18)}
+.impact-band .lab{font-size:12px;font-weight:500;color:rgba(255,255,255,.7);letter-spacing:-.01em}
+.impact-band .big{font-size:44px;font-weight:600;letter-spacing:-.035em;line-height:1.05;margin-top:.25rem;font-variant-numeric:tabular-nums}
+.impact-band .cap{font-size:13.5px;color:rgba(255,255,255,.8);line-height:1.5;margin-top:.5rem;max-width:480px}
+.impact-band .cap b{color:#fff;font-weight:600}
+.ib-bars{margin-top:1.2rem;max-width:460px}
+.ib-row{display:flex;align-items:center;gap:.7rem;margin-bottom:.5rem}
+.ib-lab{font-size:11.5px;color:rgba(255,255,255,.65);width:150px;flex-shrink:0;text-align:right}
+.ib-track{flex:1;height:9px;background:rgba(255,255,255,.18);border-radius:5px;overflow:hidden}
+.ib-fill{height:100%;border-radius:5px;background:#fff}
+.ib-fill.dim{background:rgba(255,255,255,.45)}
+.ib-val{font-size:12px;font-weight:600;width:50px;font-variant-numeric:tabular-nums}
+.caught-row{display:flex;gap:.7rem;align-items:center;padding:.7rem 0;border-bottom:1px solid var(--line)}
+.caught-row:last-child{border-bottom:none}
+.caught-ic{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700}
+.caught-txt{font-size:13px;color:var(--ink-2);line-height:1.45}
+.caught-txt b{color:var(--ink);font-weight:600}
+
+@media (max-width:720px){
+  .lp-h1{font-size:33px}.lp-stats{grid-template-columns:repeat(2,1fr)}.lp-impact-num{font-size:50px}
+  .impact-band .big{font-size:34px}.ib-lab{width:110px}
+}
+
+@media (max-width:960px){
+  .app{grid-template-columns:1fr}
+  .sb{position:fixed;left:-260px;transition:left .25s;z-index:500;box-shadow:var(--shadow-2)}
+  .sb.open{left:0}
+  .main-inner{padding:1.5rem 1.25rem 4rem}
+  .split,.split-6040,.qmetrics,.stats-4,.stats-3,.compare{grid-template-columns:1fr}
+  .login-left{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="landing">
+  <div class="lp-nav">
+    <div class="lp-logo">Grantiv<span class="d"></span></div>
+    <div class="lp-nav-right">
+      <span class="lp-tag">Live interactive demo</span>
+      <button class="btn btn-primary" onclick="enterDemo('ro')">Open the platform →</button>
+    </div>
+  </div>
+  <div class="lp-hero">
+    <div class="lp-eyebrow">For Australian university Research Offices</div>
+    <h1 class="lp-h1">More funded grants.<br>Provable AI&#8209;disclosure compliance.<br><span>One platform your office controls.</span></h1>
+    <p class="lp-sub">Grantiv catches desk-rejections before submission, scores every application against 20,847 funded ARC &amp; NHMRC projects, and auto-generates the AI disclosure now mandatory under the April 2026 ARC/NHMRC policy.</p>
+
+    <div class="lp-impact">
+      <div class="lp-impact-num">$<span id="lp-money">0.0</span>M</div>
+      <div class="lp-impact-cap">in additional research funding captured this round — by lifting Deakin's win rate from <b>18.5%&nbsp;→&nbsp;27%</b> across 47 competitive applications.</div>
+      <div class="lp-winbar">
+        <div class="lp-winbar-row"><div class="lp-winbar-lab">National average</div><div class="lp-winbar-track"><div class="lp-winbar-fill" id="lp-bar-nat" style="width:0;background:var(--ink-3)"></div></div><div class="lp-winbar-val" style="color:var(--ink-3)">18.5%</div></div>
+        <div class="lp-winbar-row"><div class="lp-winbar-lab">Deakin with Grantiv</div><div class="lp-winbar-track"><div class="lp-winbar-fill" id="lp-bar-gr" style="width:0;background:var(--accent)"></div></div><div class="lp-winbar-val" style="color:var(--accent)">27%</div></div>
+      </div>
+    </div>
+
+    <div class="lp-stats">
+      <div class="lp-stat"><div class="n" style="color:var(--accent)">27%</div><div class="l">win rate vs 18.5% national</div></div>
+      <div class="lp-stat"><div class="n" style="color:var(--ok)">100%</div><div class="l">applications AI-disclosure compliant</div></div>
+      <div class="lp-stat"><div class="n" style="color:var(--stop)">3</div><div class="l">desk-rejections prevented this round</div></div>
+      <div class="lp-stat"><div class="n">4–5<span style="font-size:14px;font-weight:500">hrs</span></div><div class="l">RO staff time saved per application</div></div>
+    </div>
+
+    <div class="lp-mandate">
+      <div class="live"><span class="blip"></span></div>
+      <div class="lp-mandate-txt"><b>ARC/NHMRC AI-disclosure mandate — active since April 2026.</b> Every application now needs a disclosure record. Institutions relying on informal AI tools have no way to produce the required register. Grantiv generates it automatically.</div>
+    </div>
+
+    <div class="lp-cta">
+      <div class="lp-cta-row">
+        <button class="btn btn-primary btn-lg" onclick="enterDemo('ro')">Open the live platform →</button>
+        <button class="btn btn-lg" onclick="enterDemo('ci')">See inside a researcher's workspace</button>
+      </div>
+      <div class="lp-cta-note">Fully interactive — click anything. Figures shown are illustrative demo data.</div>
+    </div>
+
+    <div class="lp-trust">
+      <div class="lp-trust-label">Built for research offices at</div>
+      <div class="lp-trust-row"><span>Deakin</span><span>Monash</span><span>RMIT</span><span>La Trobe</span><span>Swinburne</span><span>UniMelb</span></div>
+    </div>
+  </div>
+</div>
+<div id="toast-host"></div>
+
+<div class="app" id="main-app" style="display:none">
+
+<div class="sb" id="sb">
+  <div class="sb-brand"><div class="sb-logo">Grantiv<span class="sb-logo-dot"></span></div></div>
+  <div class="sb-inst">Deakin University</div>
+
+  <div class="role-seg">
+    <button id="seg-ci" class="on" onclick="switchRole('ci')">Researcher</button>
+    <button id="seg-ro" onclick="switchRole('ro')">Research Office</button>
+  </div>
+
+  <div class="hours">
+    <div class="ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke-width="2"/><path d="M12 7v5l3 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div style="flex:1">
+      <div style="display:flex;align-items:baseline;gap:4px"><span class="hs-num tnum" id="hs-num">0</span><span style="font-size:11px;color:var(--ink-3)">hrs</span></div>
+      <div class="hs-label">saved <b>this application</b></div>
+    </div>
+    <div class="hs-sep"></div>
+    <div style="text-align:right">
+      <div style="display:flex;align-items:baseline;gap:4px;justify-content:flex-end"><span class="hs-num tnum" id="hs-total" style="font-size:15px">0</span><span style="font-size:11px;color:var(--ink-3)">hrs</span></div>
+      <div class="hs-label" style="text-align:right">saved <b>total</b></div>
+    </div>
+  </div>
+
+  <div id="ci-nav">
+    <div class="nav-item active" data-page="home" onclick="nav('home')"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>Today<span class="nav-badge stop">3</span></div>
+    <div class="nav-sec">Discover</div>
+    <div class="nav-item" data-page="discover" onclick="nav('discover')"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>Find grants</div>
+    <div class="nav-item" data-page="gonogo" onclick="nav('gonogo')"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>Go / no-go</div>
+    <div class="nav-item" data-page="trajectory" onclick="nav('trajectory')"><svg viewBox="0 0 24 24"><path d="M4 19l5-5 4 3 7-8"/><path d="M16 9h4v4"/></svg>Career map</div>
+    <div class="nav-sec">VicHealth application</div>
+    <div class="nav-item" data-page="eligibility" onclick="nav('eligibility')"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Eligibility<span class="nav-check">✓</span></div>
+    <div class="nav-item" data-page="rope" onclick="nav('rope')"><svg viewBox="0 0 24 24"><path d="M5 3h11l4 4v14H5z"/><path d="M9 9h7M9 13h7M9 17h4"/></svg>ROPE</div>
+    <div class="nav-item" data-page="team" onclick="nav('team')"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M4 20c0-3 2-5 5-5s5 2 5 5"/><circle cx="17" cy="9" r="2.5"/><path d="M15 20c0-2.5 1.5-4 4-4"/></svg>Team<span class="nav-badge warn">!</span></div>
+    <div class="nav-item" data-page="assessor" onclick="nav('assessor')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2 2"/></svg>Assessor sim</div>
+    <div class="nav-item" data-page="project" onclick="nav('project')"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>Project</div>
+    <div class="nav-item" data-page="nit" onclick="nav('nit')"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>National Interest Test</div>
+    <div class="nav-item" data-page="budget" onclick="nav('budget')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h3.5a2 2 0 010 4H10"/></svg>Budget</div>
+    <div class="nav-item" data-page="compliance" onclick="nav('compliance')"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Compliance</div>
+    <div class="nav-sec">After submission</div>
+    <div class="nav-item" data-page="rejoinder" onclick="nav('rejoinder')"><svg viewBox="0 0 24 24"><path d="M9 17l-5-5 5-5"/><path d="M4 12h11a5 5 0 015 5v2"/></svg>Rejoinder</div>
+    <div class="nav-item" data-page="reporting" onclick="nav('reporting')"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Reports</div>
+    <div class="nav-item" data-page="recycle" onclick="nav('recycle')"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 0114-5l2 2"/><path d="M20 12a8 8 0 01-14 5l-2-2"/><path d="M20 5v4h-4M4 19v-4h4"/></svg>Recycler</div>
+    <div class="nav-item" data-page="library" onclick="nav('library')"><svg viewBox="0 0 24 24"><path d="M5 4h4v16H5zM11 4h4v16h-4z"/><path d="M17 5l3 1-3 14-3-1"/></svg>Library</div>
+  </div>
+
+  <div id="ro-nav" style="display:none">
+    <div class="nav-item" data-page="ro-home" onclick="nav('ro-home')"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="7"/><rect x="13" y="7" width="3" height="11"/></svg>Pipeline</div>
+    <div class="nav-item" data-page="workflow" onclick="nav('workflow')"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M8 7l8 4M8 17l8-4"/></svg>Version control</div>
+    <div class="nav-item" data-page="analytics" onclick="nav('analytics')"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg>Win rates</div>
+    <div class="nav-item" data-page="disclosure" onclick="nav('disclosure')"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/></svg>AI disclosure</div>
+    <div class="nav-item" data-page="mandate" onclick="nav('mandate')"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6z"/></svg>Mandate</div>
+  </div>
+
+  <div class="sb-foot">
+    <div class="sb-av">PT</div>
+    <div class="sb-uinfo"><div class="sb-uname">Dr Patricia Taylor</div><div class="sb-uinst">Deakin University</div></div>
+    <button class="sb-gear" onclick="openSettings()" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg></button>
+  </div>
+
+  <div id="settings-modal">
+    <div class="modal-backdrop" onclick="closeSettings()"></div>
+    <div class="modal-box">
+      <div class="modal-head"><div class="modal-title">API settings</div><button class="modal-close" onclick="closeSettings()">✕</button></div>
+      <div class="modal-body">
+        <label class="modal-label">Anthropic API key</label>
+        <input type="password" class="modal-input" id="apikey" placeholder="sk-ant-..." oninput="saveKey()">
+        <div class="modal-note">Stored locally in this browser only. Every screen works without a key — live drafting (ROPE, NIT, project, rejoinder, assessor) needs one.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main"><div class="main-inner">
+
+<!-- TODAY -->
+<div class="page active" id="p-home">
+  <div class="ph"><div class="ph-top">
+    <div><div class="ph-eyebrow">Vape &amp; Smoke-Free Program · VicHealth</div><div class="ph-title">Good afternoon, Patricia</div></div>
+    <div class="deadline-chip"><span class="dot"></span>Submission in <b>35 days</b> · 14 Jun</div>
+  </div></div>
+  <div style="font-size:13.5px;color:var(--ink-2);margin:-.4rem 0 .9rem">Grantiv caught 3 issues that would each have cost you the application.</div>
+
+  <div class="catch stop">
+    <div class="catch-ic"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg></div>
+    <div class="catch-body">
+      <div class="catch-title">Prof Colin Bell is ineligible — desk rejection risk</div>
+      <div class="catch-desc">He holds 2 active ARC Discovery Projects; the concurrent limit for this scheme is 2. With Bell on the team, ARC returns the application unassessed. No appeal.</div>
+      <div class="catch-meta">ARC Instructions to Applicants §3.4 · verified against Current Projects register, 9 May 2026</div>
+      <div class="catch-actions"><button class="btn btn-red btn-sm" onclick="nav('eligibility')">View eligibility</button><button class="btn btn-sm">Email Bell</button></div>
+    </div>
+  </div>
+
+  <div class="catch warn">
+    <div class="catch-ic"><svg viewBox="0 0 24 24"><path d="M12 9v4M12 17h.01" stroke-linecap="round"/><path d="M10.3 3.9L2.4 18a2 2 0 001.7 3h15.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg></div>
+    <div class="catch-body">
+      <div class="catch-title">Your NIT reads at Grade 11.8 — target is 9–10</div>
+      <div class="catch-desc">The National Interest Test is read by the ARC CEO and the Minister, not your peers. Four flagged terms remain: <i>epidemiological, determinants, longitudinal, multivariate</i>. Funded public-health NITs average Grade 8.4.</div>
+      <div class="catch-meta">Benchmarked against 23 funded VicHealth NITs in the corpus</div>
+      <div class="catch-actions"><button class="btn btn-sm btn-sage" onclick="nav('nit')">Rewrite to Grade 9</button></div>
+    </div>
+  </div>
+
+  <div class="catch warn">
+    <div class="catch-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg></div>
+    <div class="catch-body">
+      <div class="catch-title">A/Prof Hua Yong hasn't started their ROPE — 5 days left</div>
+      <div class="catch-desc">Link sent 3 May, 3 reminders, no response. If Yong misses the internal deadline, the Research Office can't finish its review before RMS closes.</div>
+      <div class="catch-actions"><button class="btn btn-sm" onclick="nav('team')">View team</button><button class="btn btn-sm" onclick="alert('Escalation email sent to Department Head.')">Escalate</button></div>
+    </div>
+  </div>
+
+  <div class="card ring-card" style="margin-top:1.1rem">
+    <div class="ring">
+      <svg width="108" height="108" viewBox="0 0 108 108">
+        <circle cx="54" cy="54" r="46" fill="none" stroke="#ececef" stroke-width="9"/>
+        <circle cx="54" cy="54" r="46" fill="none" stroke="var(--warn)" stroke-width="9" stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="75"/>
+      </svg>
+      <div class="ring-val"><div class="ring-num tnum" style="color:var(--warn)">74</div><div class="ring-den">/ 100</div></div>
+    </div>
+    <div class="ring-meta"><h4>Application readiness</h4><p>Scored against 23 funded VicHealth Impact Grants in public health. Funded average is <b>82</b>. The two fixes below close most of the gap.</p></div>
+  </div>
+
+  <div class="qmetrics" style="margin-bottom:1rem">
+    <div class="qs"><div class="qs-label">ROPE strength</div><div class="qs-num tnum" style="color:var(--warn)">74<span style="font-size:13px;color:var(--ink-3);font-weight:450">/100</span></div><div class="qs-bar"><div class="qs-fill" style="width:74%;background:var(--warn)"></div></div><div class="qs-note">Leads with output count before journal quality. Funded ROPEs reverse that.</div><button class="btn btn-xs btn-ghost" onclick="nav('rope')" style="margin-top:.5rem;margin-left:-.5rem">Fix →</button></div>
+    <div class="qs"><div class="qs-label">NIT readability</div><div class="qs-num tnum" style="color:var(--stop)">61<span style="font-size:13px;color:var(--ink-3);font-weight:450">/100</span></div><div class="qs-bar"><div class="qs-fill" style="width:61%;background:var(--stop)"></div></div><div class="qs-note">Grade 11.8 against a Grade 9–10 target. Auto-rewrite available.</div><button class="btn btn-xs btn-ghost" onclick="nav('nit')" style="margin-top:.5rem;margin-left:-.5rem">Fix →</button></div>
+    <div class="qs"><div class="qs-label">Co-design credibility</div><div class="qs-num tnum" style="color:var(--ok)">88<span style="font-size:13px;color:var(--ink-3);font-weight:450">/100</span></div><div class="qs-bar"><div class="qs-fill" style="width:88%;background:var(--ok)"></div></div><div class="qs-note">Above the VicHealth average. Your edge in this scheme.</div></div>
+  </div>
+
+  <div class="tbl-wrap"><table class="tbl tbl-hover">
+    <thead><tr><th>Grant</th><th>Scheme</th><th>Deadline</th><th>Progress</th><th>Score</th><th>Outcome</th></tr></thead>
+    <tbody>
+      <tr onclick="nav('rope')"><td><strong>Vape &amp; Smoke-Free Program</strong><br><span style="font-size:11.5px;color:var(--ink-3)">Lead CI</span></td><td><span class="pill p-blue">VicHealth</span></td><td><span style="color:var(--stop);font-weight:600">14 Jun</span></td><td><div style="display:flex;align-items:center;gap:.5rem"><div class="prog"><div class="prog-fill" style="width:45%"></div></div><span style="font-size:11.5px;color:var(--ink-3)">3 of 7</span></div></td><td><span style="font-weight:600;color:var(--warn)" class="tnum">74</span><span style="color:var(--ink-3);font-size:11px">/100</span></td><td><span class="pill p-blue">In progress</span></td></tr>
+      <tr onclick="nav('library')"><td><strong>Rural Food Equity</strong><br><span style="font-size:11.5px;color:var(--ink-3)">Co-CI</span></td><td><span class="pill p-blue">VicHealth</span></td><td>Submitted</td><td><div style="display:flex;align-items:center;gap:.5rem"><div class="prog"><div class="prog-fill" style="width:100%"></div></div><span style="font-size:11.5px;color:var(--ok)">Done</span></div></td><td>—</td><td><span class="outcome-btn funded">✓ Funded</span></td></tr>
+      <tr onclick="nav('discover')"><td><strong>DECRA 2027</strong><br><span style="font-size:11.5px;color:var(--ink-3)">Solo</span></td><td><span class="pill p-gray">ARC DECRA</span></td><td>Oct 2026</td><td><div style="display:flex;align-items:center;gap:.5rem"><div class="prog"><div class="prog-fill" style="width:0%"></div></div><span style="font-size:11.5px;color:var(--ink-3)">Not started</span></div></td><td><span style="font-size:12px;color:var(--ink-3)">—</span></td><td><span class="pill p-gray">Upcoming</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- DISCOVER -->
+<div class="page" id="p-discover">
+  <div class="ph"><div class="ph-eyebrow">Discover</div><div class="ph-title">Find grants you can win</div><div class="ph-sub">Describe the research problem — not keywords. Grantiv ranks every open Australian scheme by predicted success for your profile.</div></div>
+  <div class="card">
+    <div class="field"><textarea id="disc-area" rows="3">I want to study why young Australians are taking up vaping despite restrictions, identify the social and peer-influence factors driving uptake at universities, and co-design evidence-based prevention programs with student communities. The ultimate goal is to produce recommendations for national vaping policy.</textarea></div>
+    <div class="fg3">
+      <div class="field"><label>Career stage</label><select id="disc-stage"><option>Early career (under 5 FTE years)</option><option selected>Mid-career (5–15 FTE years)</option><option>Senior (15+ FTE years)</option></select></div>
+      <div class="field"><label>Funding range</label><select id="disc-range"><option>Under $100K (seed / pilot)</option><option selected>$100K–$300K (standard)</option><option>$300K–$600K (large)</option><option>Any</option></select></div>
+      <div class="field"><label>Earliest deadline</label><select id="disc-dl"><option>Within 4 weeks</option><option selected>Within 3 months</option><option>Within 6 months</option><option>Anytime in 2026</option></select></div>
+    </div>
+    <button class="btn btn-primary" onclick="runDiscovery()">Find matching grants</button>
+  </div>
+  <div id="disc-results" style="display:none"><div class="success" id="disc-summary"></div><div id="disc-list"></div></div>
+  <div id="disc-orcid-section"><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin:1.2rem 0 .7rem">Pre-matched from your ORCID · 2 deadlines within 6 weeks</div><div id="disc-orcid-list"></div></div>
+</div>
+
+<!-- GO / NO-GO -->
+<div class="page" id="p-gonogo">
+  <div class="ph"><div class="ph-eyebrow">Discover</div><div class="ph-title">Should you apply?</div><div class="ph-sub">Track record and environment drive 55% of ARC scoring; project quality only 25%. Grantiv runs your real profile before you spend 180 hours.</div></div>
+  <div class="split">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:1rem">Your profile</div>
+      <div class="field"><label>Scheme</label><select id="gng-scheme"><option>VicHealth Impact Grant</option><option>ARC Discovery Project</option><option>NHMRC Ideas Grant</option><option>ARC DECRA</option><option>ARC Future Fellowship</option><option>ARC Linkage Project</option></select></div>
+      <div class="fg2"><div class="field"><label>Q1 papers (5 yrs)</label><input id="gng-q1" value="3" type="number" min="0"></div><div class="field"><label>Total papers (5 yrs)</label><input id="gng-pubs" value="5" type="number" min="0"></div></div>
+      <div class="fg2"><div class="field"><label>FTE research years</label><input id="gng-fte" value="10.2" type="number" step="0.1"></div><div class="field"><label>Funded as lead CI</label><input id="gng-grants" value="1" type="number" min="0"></div></div>
+      <div class="field"><label>Industry / community partner?</label><select id="gng-partner"><option value="yes">Yes — named, signed letter</option><option value="informal">Yes — informal</option><option value="no">No</option></select></div>
+      <div class="field"><label>Previous applications to this scheme</label><select id="gng-prev"><option value="none">None — first time</option><option value="1u" selected>1 — unsuccessful</option><option value="1f">1 — funded</option><option value="multi">2 or more</option></select></div>
+      <button class="btn btn-primary pulse" id="gng-btn" onclick="runGoNoGo()">Run analysis</button>
+    </div>
+    <div>
+      <div class="card" style="text-align:center;padding:1.75rem 1rem" id="gng-result-card">
+        <div style="font-size:12px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.6rem;font-weight:500">Predicted success</div>
+        <div id="gng-score" style="font-size:60px;font-weight:600;letter-spacing:-.04em;color:var(--ink-3);font-variant-numeric:tabular-nums">—</div>
+        <div id="gng-baseline" style="font-size:12.5px;color:var(--ink-3);margin-top:.3rem"></div>
+        <div id="gng-breakdown" style="text-align:left;border-top:1px solid var(--line);padding-top:1rem;margin-top:1rem"></div>
+      </div>
+    </div>
+  </div>
+  <div id="gng-detail" style="display:none">
+    <div class="card"><div class="card-title">What this is telling you</div><div id="gng-narrative" style="font-size:13.5px;color:var(--ink-2);line-height:1.7;margin-top:.5rem"></div></div>
+    <div class="split">
+      <div class="card"><div class="card-title" style="margin-bottom:.6rem">In your favour</div><div id="gng-pros" style="font-size:13px;color:var(--ink-2);line-height:1.6"></div></div>
+      <div class="card"><div class="card-title" style="margin-bottom:.6rem">Working against you</div><div id="gng-cons" style="font-size:13px;color:var(--ink-2);line-height:1.6"></div></div>
+    </div>
+    <div class="card"><div class="card-title">The 180-hour ROI</div><div id="gng-roi" style="font-size:13.5px;color:var(--ink-2);line-height:1.7;margin-top:.5rem"></div><div id="gng-recommendation" style="margin-top:1rem;padding:.9rem 1rem;border-radius:var(--r);font-size:13.5px;font-weight:600"></div></div>
+  </div>
+</div>
+
+<!-- CAREER MAP -->
+<div class="page" id="p-trajectory">
+  <div class="ph"><div class="ph-eyebrow">Discover</div><div class="ph-title">Your grant career map</div><div class="ph-sub">Where your profile reaches now, and what each tier needs next. Updated automatically from ORCID.</div></div>
+  <div class="stats stats-4" style="margin-bottom:1rem">
+    <div class="stat"><div class="stat-n tnum" style="color:var(--accent)">10.2</div><div class="stat-l">FTE research years</div></div>
+    <div class="stat"><div class="stat-n tnum" style="color:var(--accent)">5</div><div class="stat-l">Q1 publications</div></div>
+    <div class="stat win-stat"><div class="stat-n tnum">1</div><div class="stat-l">Funded grants (lead CI)</div></div>
+    <div class="stat"><div class="stat-n tnum" style="color:var(--warn)">74</div><div class="stat-l">ROPE strength score</div></div>
+  </div>
+  <div class="tbl-wrap"><table class="tbl">
+    <thead><tr><th>Scheme</th><th>Predicted success</th><th>Gap to close</th><th>Timeline</th><th></th></tr></thead>
+    <tbody>
+      <tr><td><strong>VicHealth Impact Grant</strong><br><span style="font-size:11.5px;color:var(--ink-3)">$100K–$250K</span></td><td><span style="font-size:17px;font-weight:600;color:var(--ok)" class="tnum">31%</span> <span style="font-size:11.5px;color:var(--ink-3)">vs 18% base</span></td><td style="font-size:12.5px;color:var(--ok)">No gap. Apply now.</td><td><span class="pill p-sage">Now</span></td><td><button class="btn btn-xs btn-ghost" onclick="nav('gonogo')">Go/no-go →</button></td></tr>
+      <tr><td><strong>ARC Discovery Project</strong><br><span style="font-size:11.5px;color:var(--ink-3)">$300K–$600K</span></td><td><span style="font-size:17px;font-weight:600;color:var(--warn)" class="tnum">19%</span> <span style="font-size:11.5px;color:var(--ink-3)">vs 16% base</span></td><td style="font-size:12.5px;color:var(--warn)">2 more Q1 papers → 26%</td><td><span class="pill p-amber">12–18 mo</span></td><td><button class="btn btn-xs btn-ghost">Plan →</button></td></tr>
+      <tr><td><strong>NHMRC Ideas Grant</strong><br><span style="font-size:11.5px;color:var(--ink-3)">$200K–$500K</span></td><td><span style="font-size:17px;font-weight:600;color:var(--warn)" class="tnum">12%</span> <span style="font-size:11.5px;color:var(--ink-3)">vs 8% base</span></td><td style="font-size:12.5px;color:var(--warn)">Stronger clinical translational link</td><td><span class="pill p-amber">18–24 mo</span></td><td><button class="btn btn-xs btn-ghost">Plan →</button></td></tr>
+      <tr><td><strong>ARC Future Fellowship</strong><br><span style="font-size:11.5px;color:var(--ink-3)">$300K–$400K + salary</span></td><td><span style="font-size:17px;font-weight:600;color:var(--stop)" class="tnum">8%</span> <span style="font-size:11.5px;color:var(--ink-3)">vs 12% base</span></td><td style="font-size:12.5px;color:var(--stop)">Need 12+ FTE yrs, 8 Q1, 2 funded</td><td><span class="pill p-gray">2–3 yrs</span></td><td><button class="btn btn-xs btn-ghost">Plan →</button></td></tr>
+    </tbody>
+  </table></div>
+  <div class="split">
+    <div class="card"><div class="card-title">3-year roadmap to Future Fellowship</div><div style="font-size:13px;color:var(--ink-2);line-height:1.75;margin-top:.6rem"><strong>2026</strong> — Win VicHealth. One funded lead-CI grant on record.<br><strong>2026–27</strong> — Publish 2 Q1 papers (Tobacco Control, Lancet Public Health).<br><strong>2027</strong> — ARC Discovery DP28; predicted success 19% → 26–28%.<br><strong>2028–29</strong> — Future Fellowship profile competitive at 18–22%.</div></div>
+    <div class="card"><div class="card-title">Tracked automatically</div><div style="font-size:13px;color:var(--ink-2);line-height:1.7;margin-top:.6rem">Every Q1 paper detected via ORCID moves these scores in real time. Grantiv flags Future Fellowship the moment your profile crosses 15% predicted success.</div><div class="success" style="margin-top:.9rem;font-size:12.5px">ORCID sync active · next Q1 paper moves ARC DP from 19% → 23%</div></div>
+  </div>
+</div>
+
+<!-- ELIGIBILITY -->
+<div class="page" id="p-eligibility">
+  <div class="ph"><div class="ph-eyebrow">VicHealth application</div><div class="ph-title">Eligibility</div><div class="ph-sub">Concurrent limits, overdue-report blocks and FTE rules — checked per scheme, per person, before you write a word.</div></div>
+  <div class="note stop"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div>Prof Bell would trigger a desk rejection. Run the check to see the remediation.</div></div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:1rem">CI team</div>
+    <div id="ci-rows">
+      <div class="ci-row"><div class="field" style="margin:0"><label>Name</label><input value="Dr Patricia Taylor"></div><div class="field" style="margin:0"><label>ORCID</label><input value="0000-0002-4481-xxxx"></div><div class="field" style="margin:0"><label>Active ARC grants</label><input value="1 active DP"></div><div style="padding-top:24px"><button class="btn btn-sm" onclick="this.closest('.ci-row').remove()">✕</button></div></div>
+      <div class="ci-row"><div class="field" style="margin:0"><label>Name</label><input value="A/Prof Hua Yong"></div><div class="field" style="margin:0"><label>ORCID</label><input value="0000-0001-8832-xxxx"></div><div class="field" style="margin:0"><label>Active ARC grants</label><input value="None"></div><div style="padding-top:24px"><button class="btn btn-sm" onclick="this.closest('.ci-row').remove()">✕</button></div></div>
+      <div class="ci-row"><div class="field" style="margin:0"><label>Name</label><input value="Prof Colin Bell"></div><div class="field" style="margin:0"><label>ORCID</label><input value="0000-0003-1192-xxxx"></div><div class="field" style="margin:0"><label>Active ARC grants</label><input value="2 active DPs"></div><div style="padding-top:24px"><button class="btn btn-sm" onclick="this.closest('.ci-row').remove()">✕</button></div></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:.4rem"><button class="btn btn-sm" onclick="addCI()">+ Add CI</button><button class="btn btn-primary btn-sm pulse" onclick="runElig()">Run eligibility check</button></div>
+  </div>
+  <div class="card" id="elig-out">
+    <div class="card-title" style="margin-bottom:1rem">Eligibility report</div>
+    <table class="tbl"><thead><tr><th>CI</th><th>Status</th><th>Finding</th><th>Action</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Dr Patricia Taylor</strong></td><td><span class="pill p-sage">✓ Eligible</span></td><td>1 active DP — within limit</td><td style="color:var(--ink-3);font-size:12.5px">None</td></tr>
+      <tr><td><strong>A/Prof Hua Yong</strong></td><td><span class="pill p-sage">✓ Eligible</span></td><td>No current ARC grants</td><td style="color:var(--ink-3);font-size:12.5px">None</td></tr>
+      <tr style="background:var(--stop-soft)"><td><strong>Prof Colin Bell</strong></td><td><span class="pill p-red">✕ Ineligible</span></td><td>2 active DPs — at concurrent limit. Triggers desk rejection.</td><td style="font-size:12.5px;color:var(--stop);font-weight:500">Remove, or confirm a DP ends before project start.</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ROPE -->
+<div class="page" id="p-rope">
+  <div class="ph"><div class="ph-eyebrow">VicHealth application</div><div class="ph-title">ROPE</div><div class="ph-sub">Research Opportunity and Performance Evidence — the section that wins or loses ARC grants. Same inputs, two outputs:</div></div>
+  <div class="compare">
+    <div>
+      <div class="cc-head bad"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 16h.01"/><circle cx="12" cy="12" r="9"/></svg> A general AI, same inputs <span class="tag">generic</span></div>
+      <div class="cc-body bad">Dr Patricia Taylor is a highly accomplished Senior Research Fellow with over a decade of experience in public health. She has published five peer-reviewed articles in prestigious journals and demonstrated strong national leadership. Despite a career interruption due to parental leave, she has maintained a productive and consistent research output reflecting her commitment to the field.</div>
+      <div class="cc-foot bad">Leads with count and the word "prestigious." Career interruption dismissed in one clause. No FTE figure, so the panel can't assess performance relative to opportunity — the entire point of a ROPE.</div>
+    </div>
+    <div>
+      <div class="cc-head good"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg> Grantiv, corpus-patterned <span class="tag">funded pattern</span></div>
+      <div class="cc-body good">Dr Taylor's performance must be assessed against an active career of <b>10.2 full-time-equivalent research years</b>, from PhD conferral (Melbourne, 2012), accounting for 12 months of certified parental leave (Aug 2017–Aug 2018, Deakin HR verified) and 0.6 FTE at UNSW 2012–2015. Output is anchored by <b>Tobacco Control</b> (IF 7.9, Scimago Q1 — top 6% in addiction science) and <b>Addiction</b> (IF 6.3, Q1), establishing leadership disproportionate to years of opportunity.</div>
+      <div class="cc-foot good">Opens with the FTE calculation and certified dates. Quality before count — IF and quartile, not adjectives. This is the framing 23 funded VicHealth ROPEs in the corpus use.</div>
+    </div>
+  </div>
+  <div class="chips">
+    <div class="chip"><div class="cdot"></div><div class="chip-text"><b>23 funded VicHealth applications</b> matched to your discipline. ROPE patterns extracted — your draft scores 74 against a funded average of 82.</div></div>
+    <div class="chip"><div class="cdot w"></div><div class="chip-text">Funded career-interruption framing averages <b>2.7 sentences</b> with certified dates and FTE impact. One-clause dismissals are penalised in assessor notes.</div></div>
+  </div>
+  <div class="split-6040">
+    <div class="card">
+      <div class="card-title">Career inputs</div>
+      <div class="card-sub">Pre-filled from ORCID and prior applications. Edit anything and regenerate.</div>
+      <div class="field"><label>Name</label><input id="rn" value="Dr Patricia Taylor"></div>
+      <div class="field"><label>Current role</label><input id="rr" value="Senior Research Fellow, Deakin Institute for Health Transformation"></div>
+      <div class="field"><label>PhD awarded</label><input id="rphd" value="2012, University of Melbourne"></div>
+      <div class="field"><label>Employment FTE history</label><textarea id="rfte" rows="2">Full-time at Deakin 2015–present (1.0 FTE). Part-time UNSW 2012–2015 (0.6 FTE).</textarea></div>
+      <div class="field"><label>Career interruptions</label><select id="rint"><option value="none">None</option><option value="parental" selected>Parental leave — 12 months (Aug 2017–Aug 2018, certified)</option><option value="illness">Illness / medical</option><option value="covid">COVID-19 impact 2020–2022</option></select></div>
+      <div class="field"><label>Top publications</label><textarea id="rpubs" rows="5">1. Taylor et al. (2023) "Determinants of vaping among university students" — Tobacco Control (Q1, IF 7.9)
+2. Taylor & Yong (2022) "Co-design in campus health" — Health Promotion International (Q1)
+3. Taylor et al. (2021) "E-cigarette uptake in young Australians" — ANZJPH
+4. Taylor (2020) "Nicotine addiction patterns Gen Z" — Addiction (Q1, IF 6.3)
+5. Taylor et al. (2019) "Behavioural interventions for smoking cessation" — BMJ Open</textarea></div>
+      <div class="field"><label>Engagement &amp; impact</label><textarea id="rimp" rows="2">Expert advisor, Australian Government vaping inquiry 2023. ABC News, The Guardian. VicHealth advisory board 2022–present.</textarea></div>
+      <div class="field"><label>Scheme</label><select id="rsch"><option>VicHealth Impact Grant</option><option>ARC Discovery Project</option><option>DECRA</option><option>NHMRC Investigator Grant</option></select></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary" id="rope-btn" onclick="genROPE()">Generate ROPE</button><button class="btn btn-sm" onclick="genROPE('quality')">Stronger quality framing</button></div>
+    </div>
+    <div>
+      <div class="out-wrap">
+        <div class="out-head"><div class="out-label">Your ROPE</div><div class="out-meta char-ok" id="rope-cc">0 chars</div></div>
+        <div class="out-box placeholder" id="rope-out">Generates here — both subsections in flowing third-person prose, quality before count, FTE specificity, journal impact factors cited.</div>
+        <div class="out-actions" id="rope-acts" style="display:none"><button class="btn btn-sm btn-ghost" onclick="copy('rope-out')">Copy</button><button class="btn btn-sm" onclick="genROPE('more_impact')">Stronger impact framing</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<div class="page" id="p-team">
+  <div class="ph"><div class="ph-eyebrow">VicHealth application</div><div class="ph-title">Team</div><div class="ph-sub">Each co-investigator gets a private completion link. You see status in real time — no email chains.</div></div>
+  <div class="note warn"><svg viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L2.4 18a2 2 0 001.7 3h15.8a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg><div style="flex:1">A/Prof Hua Yong hasn't started — internal deadline in 5 days. 3 reminders sent.</div><button class="btn btn-sm" onclick="alert('Escalation sent to A/Prof Yong, CC department head.')">Escalate</button></div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:.6rem">Team status</div>
+    <div class="team-row"><div class="av" style="background:var(--accent-soft);color:var(--accent-2)">PT</div><div style="flex:1"><div style="font-size:13.5px;font-weight:500">Dr Patricia Taylor <span style="font-size:11.5px;color:var(--ink-3);font-weight:400">(you)</span></div><div style="font-size:12px;color:var(--ink-3)">Lead CI · 10.2 FTE years · parental leave certified</div></div><span class="pill p-sage">✓ Done · 74</span><button class="btn btn-sm btn-ghost" onclick="nav('rope')">Improve →</button></div>
+    <div class="team-row" style="background:var(--warn-soft);border-radius:10px;padding-left:.7rem;padding-right:.7rem;margin:.2rem -.7rem"><div class="av" style="background:#fff;color:var(--warn);box-shadow:0 0 0 1px var(--warn-line)">HY</div><div style="flex:1"><div style="font-size:13.5px;font-weight:500">A/Prof Hua Yong</div><div style="font-size:12px;color:var(--ink-3)">Co-CI · Psychology · link sent 3 May · 3 reminders · no response</div></div><span class="pill p-red">Not started</span><button class="btn btn-sm" onclick="alert('Reminder sent.')">Remind</button></div>
+    <div class="team-row"><div class="av" style="background:var(--ok-soft);color:var(--ok)">MY</div><div style="flex:1"><div style="font-size:13.5px;font-weight:500">Melissa Yong</div><div style="font-size:12px;color:var(--ink-3)">Non-academic collaborator · completed via private link, no account needed</div></div><span class="pill p-sage">✓ Done · 81</span><button class="btn btn-sm btn-ghost">Review</button></div>
+  </div>
+</div>
+
+<!-- ASSESSOR -->
+<div class="page" id="p-assessor">
+  <div class="ph"><div class="ph-eyebrow">VicHealth application</div><div class="ph-title">Simulate your assessors</div><div class="ph-sub">ARC scores with 3 assessors. Grantiv simulates them from corpus patterns — read the critical one before you submit, not after.</div></div>
+  <div class="note info"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><div>Live simulation needs an Anthropic API key (gear, bottom-left). Every other screen works without one.</div></div>
+  <div class="split-6040">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:1rem">Section to assess</div>
+      <div class="field"><label>Section</label><select id="as-section"><option>ROPE (Research Opportunity and Performance Evidence)</option><option>Project description</option><option>National Interest Test</option><option>Budget justification</option></select></div>
+      <div class="field"><label>Scheme</label><select id="as-scheme"><option>VicHealth Impact Grant</option><option>ARC Discovery Project</option><option>NHMRC Ideas Grant</option><option>ARC DECRA</option></select></div>
+      <div class="field"><label>Your content</label><textarea id="as-content" rows="8">Dr Taylor's research performance must be assessed in the context of an active career of 10.2 full-time equivalent research years, calculated from PhD conferral (University of Melbourne, 2012) to the present. This figure accounts for a 12-month certified parental leave (August 2017 to August 2018, Deakin Human Resources verified) and a period of 0.6 FTE employment at UNSW from 2012 to 2015. Adjusted for opportunity, Dr Taylor's publication trajectory is exceptional relative to career stage.</textarea></div>
+      <button class="btn btn-primary" id="as-btn" onclick="runAssessor()">Simulate panel</button>
+    </div>
+    <div>
+      <div class="chips" style="margin-bottom:.9rem">
+        <div class="chip"><div class="cdot"></div><div class="chip-text">Patterns from <b>847 tracked outcomes</b>. The most common ROPE criticism appears in 34% of unsuccessful applications: performance not shown relative to opportunity.</div></div>
+        <div class="chip"><div class="cdot w"></div><div class="chip-text">Three assessors — favourable, neutral, critical. The critical one is the feedback you'd otherwise read in the rejection letter.</div></div>
+      </div>
+      <div class="out-wrap">
+        <div class="out-head"><div class="out-label">Simulated panel</div><div class="out-meta" id="as-score-meta"></div></div>
+        <div class="out-box placeholder" id="as-out" style="min-height:220px">Three assessors appear here.</div>
+        <div class="out-actions" id="as-acts" style="display:none"><button class="btn btn-sm btn-ghost" onclick="copy('as-out')">Copy</button><button class="btn btn-sm btn-sage" onclick="nav('rope')">Revise ROPE →</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECT -->
+<div class="page" id="p-project">
+  <div class="ph"><div class="ph-eyebrow">VicHealth application</div><div class="ph-title">Project description</div><div class="ph-sub">Structured in assessment-weighted order for your scheme. VicHealth weights co-design more heavily than ARC — Grantiv adjusts the section lengths.</div></div>
+  <div class="split-6040">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:1rem">Inputs</div>
+      <div class="field"><label>Title</label><input id="pt" value="Deakin Vape and Smoke-Free Program: Co-designing anti-vaping interventions with young people"></div>
+      <div class="field"><label>Plain description</label><textarea id="pd" rows="3">This project investigates key drivers of vaping among Deakin students and co-designs evidence-based interventions with student representatives to reduce uptake and support cessation.</textarea></div>
+      <div class="field"><label>Key aims</label><textarea id="pa" rows="3">Identify behavioural and social determinants of vaping among Deakin students
+Co-design and evaluate anti-vaping interventions with student health representatives
+Produce policy recommendations for tertiary institutions and government</textarea></div>
+      <div class="field"><label>Methodology</label><textarea id="pm" rows="2">Mixed methods: student survey (n=500), 4 co-design workshops, pre-post evaluation, policy analysis with VicHealth and Cancer Council.</textarea></div>
+      <div class="field"><label>Scheme</label><select id="psch"><option>VicHealth Impact Grant</option><option>ARC Discovery Project</option><option>NHMRC Ideas Grant</option></select></div>
+      <button class="btn btn-primary" id="proj-btn" onclick="genProject()">Generate description</button>
+    </div>
+    <div>
+      <div class="chips" style="margin-bottom:.9rem">
+        <div class="chip"><div class="cdot"></div><div class="chip-text"><b>Taylor et al. 2021 · $198K · Funded</b> — co-design interventions for smoking in university populations</div></div>
+        <div class="chip"><div class="cdot"></div><div class="chip-text"><b>Brown et al. 2020 · $240K · Funded</b> — youth vaping determinants and community response</div></div>
+        <div class="chip"><div class="cdot w"></div><div class="chip-text">VicHealth weights methodology at ~30% of length vs ARC's ~20%. Your section should run longer than usual.</div></div>
+      </div>
+      <div class="out-wrap">
+        <div class="out-head"><div class="out-label">Project description</div><div class="out-meta char-ok" id="proj-cc">0 chars</div></div>
+        <div class="out-box placeholder" id="proj-out">Generates here — VicHealth sections in assessment-weighted order, methodology at ~30% as the corpus requires.</div>
+        <div class="out-actions" id="proj-acts" style="display:none"><button class="btn btn-sm btn-ghost" onclick="copy('proj-out')">Copy</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NIT -->
+<div class="page" id="p-nit">
+  <div class="ph"><div class="ph-eyebrow">VicHealth application</div><div class="ph-title">National Interest Test</div><div class="ph-sub">The ARC CEO and the Minister read this — not your peers. Your academic voice works against you here.</div></div>
+  <div class="split-6040">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:1rem">Source</div>
+      <div class="field"><label>Project description</label><textarea id="ni" rows="9">Vaping has become highly prevalent among Australian university students. Recent legislation has supported reduction in retail access, but black market distribution and increasing nicotine concentrations present escalating public health risks. This research will identify key behavioural, social and environmental determinants of vaping behaviour among Deakin students using a mixed-methods approach, then co-design targeted interventions with student health representatives to reduce uptake and support cessation.</textarea></div>
+      <div class="note stop" style="font-size:12.5px"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><div>Current draft: <b>Grade 11.8</b>. Target 9–10. Jargon flagged: epidemiological, determinants, longitudinal, multivariate. Funded NITs average Grade 8.4.</div></div>
+      <button class="btn btn-primary" id="nit-btn" onclick="genNIT()">Rewrite to Grade 9</button>
+    </div>
+    <div>
+      <div class="chips" style="margin-bottom:.9rem">
+        <div class="chip"><div class="cdot w"></div><div class="chip-text">Funded public-health NITs average <b>Grade 8.4</b>. The CEO doesn't work in your field.</div></div>
+        <div class="chip"><div class="cdot"></div><div class="chip-text">Required shape: <b>what it is → why it matters → how Australia benefits</b>, in 250–300 words.</div></div>
+        <div class="chip"><div class="cdot"></div><div class="chip-text">The test: could it run in an ABC News story without editing?</div></div>
+      </div>
+      <div class="out-wrap">
+        <div class="out-head"><div class="out-label">National Interest Test</div><div class="out-meta char-ok" id="nit-cc">0 chars</div></div>
+        <div class="out-box placeholder" id="nit-out">Generates here — Grade 9–10, zero jargon, three-part structure.</div>
+        <div class="out-actions" id="nit-acts" style="display:none"><button class="btn btn-sm btn-ghost" onclick="copy('nit-out')">Copy</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BUDGET -->
+<div class="page" id="p-budget">
+  <div class="ph"><div class="ph-eyebrow">VicHealth application</div><div class="ph-title">Budget justification</div><div class="ph-sub">Line-item narratives at the detail ARC expects, headings aligned to the D1 table, page limit checked automatically.</div></div>
+  <div class="card">
+    <div class="fg3"><div class="field"><label>Duration</label><select><option>2 years</option><option>3 years</option></select></div><div class="field"><label>Total requested</label><input value="$150,000"></div><div class="field"><label>Scheme</label><select><option>VicHealth Impact Grant</option><option>ARC Discovery Project</option></select></div></div>
+    <div class="div"></div>
+    <div class="card-title" style="font-size:13px;margin-bottom:.7rem">Personnel</div>
+    <div class="fg3"><div class="field"><label>Role</label><input value="Research Assistant (Level A, Step 3)"></div><div class="field"><label>FTE</label><select><option>0.5 FTE</option><option>1.0 FTE</option></select></div><div class="field"><label>Duration</label><input value="18 months"></div></div>
+    <div class="div"></div>
+    <div class="card-title" style="font-size:13px;margin-bottom:.7rem">Travel</div>
+    <div class="fg3"><div class="field"><label>Destination</label><input value="Geelong & Melbourne campuses"></div><div class="field"><label>Purpose</label><input value="Co-design workshops"></div><div class="field"><label>Trips</label><input value="8 return trips"></div></div>
+    <button class="btn btn-primary" onclick="showBudget()">Generate justification</button>
+  </div>
+  <div id="bud-out" style="display:none">
+    <div class="out-wrap">
+      <div class="out-head"><div class="out-label">Budget justification</div><div class="out-meta char-ok">Within 3-page limit ✓</div></div>
+      <div class="out-box">PERSONNEL
+
+Research Assistant (Level A, Step 3): A Research Assistant at 0.5 FTE is required for 18 months to coordinate participant recruitment, administer the student survey (n=500), facilitate and document co-design workshops, and contribute to data analysis. The 0.5 FTE reflects the staged research design in Section C2, with data collection concentrated in months 1–12. Salary at Level A Step 3: $48,500 × 0.5 FTE × 1.5 years × 1.11 super = $40,436.
+
+TRAVEL
+
+Domestic — Geelong and Melbourne campuses: Eight return trips between Waurn Ponds and Burwood are required to facilitate co-design workshops at both sites. In-person facilitation is essential to the methodology and cannot be conducted remotely. Estimated cost per return trip: $180. Total: 8 × $180 = $1,440.</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPLIANCE -->
+<div class="page" id="p-compliance">
+  <div class="ph"><div class="ph-eyebrow">VicHealth application</div><div class="ph-title">Compliance</div><div class="ph-sub">The Research Office does this manually in 4–5 hours. Grantiv does it in 60 seconds, including the AI disclosure report now required under the April 2026 mandate.</div></div>
+  <div class="card"><button class="btn btn-primary" onclick="runComp()">Run compliance check</button><div style="font-size:12.5px;color:var(--ink-3);margin-top:.7rem">Guidelines update automatically when ARC publishes new Instructions to Applicants.</div></div>
+  <div id="comp-out" style="display:none">
+    <div class="card"><div class="card-title">Report · VicHealth · 9 May 2026</div><div class="card-sub">9 passed · 2 require action</div><div id="comp-items"></div></div>
+    <div class="card"><div class="card-title" style="color:var(--ok)">AI disclosure report — auto-generated</div><div class="card-sub">Required under ARC/NHMRC April 2026 policy. Zero manual work.</div>
+      <div class="out-box" style="font-size:12.5px;min-height:80px">AI Disclosure Report · Deakin Vape and Smoke-Free Program · Lead CI: Dr Patricia Taylor · 9 May 2026
+
+Sections where Grantiv was used:
+• ROPE — AI-generated draft from ORCID + inputs. Human-edited and approved.
+• Project Description — AI-generated structure. Scientific content authored by CI team.
+• National Interest Test — AI-generated rewrite. Reviewed and approved.
+• Budget Justification — AI-generated narratives. Figures verified by CI and Research Office.
+
+The lead CI certifies all information is accurate and accepts full responsibility for application content.</div>
+      <button class="btn btn-sm" style="margin-top:.75rem">Download PDF for RMS</button>
+    </div>
+  </div>
+</div>
+
+<!-- REJOINDER -->
+<div class="page" id="p-rejoinder">
+  <div class="ph"><div class="ph-eyebrow">After submission · 72-hour window</div><div class="ph-title">Rejoinder</div><div class="ph-sub">Your submitted application is already loaded. ARC's rule — respond only with submitted content — is enforced automatically.</div></div>
+  <div class="note stop"><svg viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div>Rejoinder window open · deadline <b>12 May 2026, 5:00pm AEST</b> · 67 hours remaining</div></div>
+  <div class="split">
+    <div class="card"><div class="card-title" style="margin-bottom:1rem">Assessor comment</div><div class="field"><textarea id="rc" rows="6">The ROPE section does not adequately demonstrate the applicant's performance relative to career opportunity. While career interruptions are noted, the evidence provided does not clearly establish why the publication record should be assessed differently to a researcher without those interruptions. The panel would benefit from a more explicit quantitative framing of output relative to active research periods.</textarea></div><button class="btn btn-primary" id="rej-btn" onclick="genRejoinder()">Draft rejoinder</button></div>
+    <div><div class="out-wrap"><div class="out-head"><div class="out-label">Response</div><div class="out-meta char-ok" id="rej-cc">0 chars</div></div><div class="out-box placeholder" id="rej-out">Built only from your submitted application, in professional tone, within ARC limits.</div><div class="out-actions" id="rej-acts" style="display:none"><button class="btn btn-sm btn-ghost" onclick="copy('rej-out')">Copy</button></div></div></div>
+  </div>
+</div>
+
+<!-- REPORTING -->
+<div class="page" id="p-reporting">
+  <div class="ph"><div class="ph-eyebrow">Post-award</div><div class="ph-title">Progress report</div><div class="ph-sub">Overdue reports block future ARC eligibility. Grantiv tracks activity all year and pre-fills the report.</div></div>
+  <div class="success">Year 1 auto-populated · 3 new publications via ORCID · 4 workshops logged · ready to review</div>
+  <div class="card">
+    <div class="card-title">Annual Progress Report · Year 1 of 2 · VicHealth $150K</div>
+    <div class="stats stats-3" style="margin:1rem 0"><div class="stat"><div class="stat-n tnum" style="color:var(--ok)">3</div><div class="stat-l">Publications (ORCID)</div></div><div class="stat"><div class="stat-n tnum" style="color:var(--accent)">4</div><div class="stat-l">Workshops completed</div></div><div class="stat"><div class="stat-n tnum">87%</div><div class="stat-l">Budget utilisation</div></div></div>
+    <div class="out-box" style="min-height:100px">PROGRESS AGAINST AIMS
+
+Aim 1 — Identify determinants of vaping: Completed. Survey administered to 487 students. Key findings: peer influence (68%), stress/anxiety (54%). Manuscript submitted to Tobacco Control.
+
+Aim 2 — Co-design interventions: In progress. Four workshops held (n=28). Intervention prototype developed and pilot-tested.
+
+Aim 3 — Policy recommendations: On track for Year 2.</div>
+    <div style="display:flex;gap:8px;margin-top:.75rem"><button class="btn btn-sm">Edit</button><button class="btn btn-sage btn-sm">Submit to VicHealth</button></div>
+  </div>
+</div>
+
+<!-- RECYCLER -->
+<div class="page" id="p-recycle">
+  <div class="ph"><div class="ph-eyebrow">After submission</div><div class="ph-title">Rejection recycler</div><div class="ph-sub">An unsuccessful application is 180 hours of reusable work. Grantiv shows what to salvage and which schemes it fits next.</div></div>
+  <div class="tbl-wrap"><table class="tbl">
+    <thead><tr><th>Scheme</th><th>Reuse</th><th>Required changes</th><th>Fit</th><th></th></tr></thead>
+    <tbody>
+      <tr><td><strong>VicHealth Impact Grant 2026</strong></td><td style="font-size:12.5px">Literature review, aims, budget</td><td style="font-size:12.5px;color:var(--warn)">Co-design weighting 30% not 20%</td><td><span class="pill p-sage">High</span></td><td><button class="btn btn-xs btn-ghost" onclick="nav('project')">Adapt →</button></td></tr>
+      <tr><td><strong>Cancer Council Victoria 2026</strong></td><td style="font-size:12.5px">Aims, rationale, budget logic</td><td style="font-size:12.5px;color:var(--warn)">Narrower nicotine/cancer focus</td><td><span class="pill p-amber">Medium</span></td><td><button class="btn btn-xs btn-ghost">Adapt →</button></td></tr>
+      <tr><td><strong>ARC Discovery DP28 2027</strong></td><td style="font-size:12.5px">Full project + ROPE revision</td><td style="font-size:12.5px;color:var(--ink-3)">Fix the ROPE framing that caused the rejection</td><td><span class="pill p-blue">Rebuild</span></td><td><button class="btn btn-xs btn-ghost">Plan →</button></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- LIBRARY -->
+<div class="page" id="p-library">
+  <div class="ph"><div class="ph-eyebrow">Library</div><div class="ph-title">Past applications</div><div class="ph-sub">Every application stored, versioned and reusable. Your next grant starts from your last.</div></div>
+  <div class="stats stats-4" style="margin-bottom:1rem">
+    <div class="stat"><div class="stat-n tnum">47</div><div class="stat-l">Tracked publications (ORCID)</div></div>
+    <div class="stat"><div class="stat-n tnum">4</div><div class="stat-l">ROPE versions</div></div>
+    <div class="stat win-stat"><div class="stat-n tnum">2</div><div class="stat-l">Funded applications, full text</div></div>
+    <div class="stat"><div class="stat-n tnum">3</div><div class="stat-l">Funding rounds</div></div>
+  </div>
+  <div class="tbl-wrap"><table class="tbl tbl-hover">
+    <thead><tr><th>Application</th><th>Scheme</th><th>Round</th><th>Outcome</th><th>Reuse</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Vape &amp; Smoke-Free Program</strong></td><td>VicHealth</td><td>2026</td><td><div style="display:flex;gap:6px;align-items:center"><span class="pill p-blue">Submitted</span><select onchange="markOutcome(this)" style="font-size:11.5px;padding:3px 6px;width:auto;border-radius:6px"><option value="">Mark outcome</option><option value="funded">✓ Funded</option><option value="unsuccessful">✕ Unsuccessful</option></select></div></td><td><button class="btn btn-xs btn-ghost">Load →</button></td></tr>
+      <tr><td><strong>Rural Food Equity</strong></td><td>VicHealth</td><td>2025</td><td><span class="outcome-btn funded">✓ Funded · $198K</span></td><td><button class="btn btn-xs btn-ghost">Load →</button></td></tr>
+      <tr><td><strong>Nicotine Behaviour in Gen Z</strong></td><td>ARC DP</td><td>2024</td><td><span class="outcome-btn unsuccessful">✕ Unsuccessful</span></td><td><button class="btn btn-xs btn-ghost">Load →</button></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- RO: OVERVIEW -->
+<div class="page" id="p-ro-home">
+  <div class="ph"><div class="ph-eyebrow">Research Office · Deakin University</div><div class="ph-title">Overview</div><div class="ph-sub">Institutional grant performance, compliance posture and live pipeline — in one place.</div></div>
+
+  <div class="impact-band">
+    <div class="lab">Additional research funding captured this round</div>
+    <div class="big">$<span id="ib-money">0.0</span>M</div>
+    <div class="cap">Lifting the institution's competitive win rate from <b>18.5%</b> (national average) to <b>27%</b> across 47 applications — the difference between 8.7 and 12.7 funded grants.</div>
+    <div class="ib-bars">
+      <div class="ib-row"><div class="ib-lab">National average</div><div class="ib-track"><div class="ib-fill dim" id="ib-bar-nat" style="width:0"></div></div><div class="ib-val" style="color:rgba(255,255,255,.7)">18.5%</div></div>
+      <div class="ib-row"><div class="ib-lab">Deakin · Grantiv</div><div class="ib-track"><div class="ib-fill" id="ib-bar-gr" style="width:0"></div></div><div class="ib-val">27%</div></div>
+    </div>
+  </div>
+
+  <div class="stats stats-4">
+    <div class="stat"><div class="stat-n tnum">12</div><div class="stat-l">Active applications</div></div>
+    <div class="stat"><div class="stat-n tnum" style="color:var(--stop)">3</div><div class="stat-l">Desk-rejections prevented</div></div>
+    <div class="stat"><div class="stat-n tnum" style="color:var(--warn)">2</div><div class="stat-l">Deadlines &lt; 14 days</div></div>
+    <div class="stat"><div class="stat-n tnum" style="color:var(--ok)">58</div><div class="stat-l">RO staff hours saved this round</div></div>
+  </div>
+
+  <div class="split" style="margin-bottom:1rem">
+    <div class="card" style="margin-bottom:0;border-color:var(--ok-line);background:linear-gradient(180deg,var(--ok-soft),var(--surface) 60%)">
+      <div class="card-head"><div class="card-title">AI-disclosure compliance</div><span class="pill p-sage">Compliant</span></div>
+      <div style="display:flex;align-items:baseline;gap:.5rem;margin:.6rem 0 .2rem"><div style="font-size:32px;font-weight:600;letter-spacing:-.03em;color:var(--ok)" class="tnum">12/12</div><div style="font-size:13px;color:var(--ink-2)">applications have a disclosure record</div></div>
+      <div style="font-size:12.5px;color:var(--ink-2);line-height:1.5;margin-top:.5rem">Mandatory under ARC/NHMRC since April 2026. Generated automatically — informal AI use leaves the institution unable to produce this register.</div>
+      <button class="btn btn-sm btn-sage" style="margin-top:.9rem" onclick="nav('disclosure')">Open disclosure register →</button>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title" style="margin-bottom:.7rem">What Grantiv caught across the institution</div>
+      <div class="caught-row"><div class="caught-ic" style="background:var(--stop-soft);color:var(--stop)">✕</div><div class="caught-txt"><b>Desk-rejection prevented</b> — Prof Bell at ARC concurrent-project limit on Taylor's VicHealth bid.</div></div>
+      <div class="caught-row"><div class="caught-ic" style="background:var(--warn-soft);color:var(--warn)">!</div><div class="caught-txt"><b>2 partner letters missing</b> flagged before internal deadline across the pipeline.</div></div>
+      <div class="caught-row"><div class="caught-ic" style="background:var(--warn-soft);color:var(--warn)">!</div><div class="caught-txt"><b>NIT readability</b> below the funded threshold on 3 applications — auto-fix offered.</div></div>
+    </div>
+  </div>
+
+  <div class="try-band">
+    <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+    <div style="flex:1">See it for yourself — open Dr Taylor's application to watch Grantiv catch a desk-rejection live.</div>
+    <button class="btn btn-sm btn-primary" onclick="switchRole('ci');nav('eligibility')">Open application →</button>
+  </div>
+
+  <div class="tbl-wrap"><table class="tbl tbl-hover">
+    <thead><tr><th>Lead CI</th><th>Scheme</th><th>Internal deadline</th><th>Team</th><th>Compliance</th><th>Outcome</th></tr></thead>
+    <tbody>
+      <tr onclick="switchRole('ci');nav('home')"><td><strong>Dr Patricia Taylor</strong></td><td><span class="pill p-blue">VicHealth</span></td><td><span style="color:var(--stop)">14 Jun</span></td><td><div style="display:flex;align-items:center;gap:6px"><div class="prog"><div class="prog-fill" style="width:75%"></div></div><span style="font-size:11.5px;color:var(--ink-3)">3/4</span></div></td><td><span class="pill p-amber">⚠ 1</span></td><td><span class="pill p-blue">In progress</span></td></tr>
+      <tr><td><strong>Dr Nguyen Van Minh</strong></td><td><span class="pill p-blue">DECRA</span></td><td>20 Jun</td><td><div style="display:flex;align-items:center;gap:6px"><div class="prog"><div class="prog-fill" style="width:100%"></div></div><span style="font-size:11.5px;color:var(--ok)">Done</span></div></td><td><span class="pill p-sage">✓</span></td><td><select onchange="markOutcome(this)" style="font-size:11.5px;padding:3px 6px;width:auto;border-radius:6px"><option>Mark outcome</option><option>✓ Funded</option><option>✕ Unsuccessful</option></select></td></tr>
+      <tr><td><strong>Prof Cherie Russell</strong></td><td><span class="pill p-blue">VicHealth</span></td><td>5 Jul</td><td><div style="display:flex;align-items:center;gap:6px"><div class="prog"><div class="prog-fill" style="width:30%"></div></div><span style="font-size:11.5px;color:var(--ink-3)">3/10</span></div></td><td><span class="pill p-red">✕ 2</span></td><td><span class="pill p-gray">In progress</span></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- RO: VERSION CONTROL -->
+<div class="page" id="p-workflow">
+  <div class="ph"><div class="ph-eyebrow">Research Office</div><div class="ph-title">Version control &amp; sign-off</div><div class="ph-sub">Every edit tracked, every review logged. Managing institutional submissions here makes switching a DVC-R decision, not a software swap.</div></div>
+  <div class="split">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:.8rem">Version history · ROPE (Dr Taylor)</div>
+      <div class="ver-row"><div class="ver-dot" style="background:var(--ok)"></div><div><div style="font-size:13.5px;font-weight:500">v4 · Approved by Research Office</div><div style="font-size:11.5px;color:var(--ink-3)">9 May 2026, 2:14pm</div></div></div>
+      <div class="ver-row"><div class="ver-dot" style="background:var(--accent)"></div><div><div style="font-size:13.5px;font-weight:500">v3 · Quality framing revision</div><div style="font-size:11.5px;color:var(--ink-3)">8 May 2026, 4:31pm · Dr Taylor</div></div></div>
+      <div class="ver-row"><div class="ver-dot" style="background:var(--ink-3)"></div><div><div style="font-size:13.5px;font-weight:500">v2 · Research Office feedback applied</div><div style="font-size:11.5px;color:var(--ink-3)">7 May 2026, 10:05am · Dr Taylor</div></div></div>
+      <div class="ver-row"><div class="ver-dot" style="background:var(--ink-3)"></div><div><div style="font-size:13.5px;font-weight:500">v1 · AI-generated draft</div><div style="font-size:11.5px;color:var(--ink-3)">6 May 2026, 9:18am · Grantiv</div></div></div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:.8rem">Internal sign-off</div>
+      <div class="signoff-step"><div class="so-icon so-done">✓</div><div><div class="so-title">Lead CI sign-off</div><div class="so-meta">Dr Taylor · 9 May 2026</div></div></div>
+      <div class="signoff-step"><div class="so-icon so-done">✓</div><div><div class="so-title">Research Office compliance</div><div class="so-meta">Completed · 2 issues resolved</div></div></div>
+      <div class="signoff-step"><div class="so-icon so-pending">○</div><div><div class="so-title">DVC-Research NIT certification</div><div class="so-meta" style="color:var(--warn)">Pending · required before RMS</div></div></div>
+      <div class="signoff-step"><div class="so-icon so-pending">○</div><div><div class="so-title">RMS submission</div><div class="so-meta" style="color:var(--ink-3)">Locked until DVC-R signs off</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- RO: ANALYTICS -->
+<div class="page" id="p-analytics">
+  <div class="ph"><div class="ph-eyebrow">Research Office</div><div class="ph-title">Win rate analytics</div><div class="ph-sub">847 outcomes tracked nationally — Grantiv drafts from what actually wins this year, not what the internet thinks sounds good.</div></div>
+  <div class="stats stats-4">
+    <div class="stat win-stat"><div class="stat-n tnum">27%</div><div class="stat-l">Deakin success rate</div></div>
+    <div class="stat"><div class="stat-n tnum" style="color:var(--ink-3)">18.5%</div><div class="stat-l">National ARC average</div></div>
+    <div class="stat"><div class="stat-n tnum" style="color:var(--stop)">11%</div><div class="stat-l">Deakin NHMRC (= opportunity)</div></div>
+    <div class="stat"><div class="stat-n tnum">847</div><div class="stat-l">Outcomes tracked</div></div>
+  </div>
+  <div class="tbl-wrap"><table class="tbl">
+    <thead><tr><th>Researcher</th><th>Opportunity flagged</th><th>Readiness</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>Dr Nguyen Van Minh</td><td>DECRA 2027 — ROPE strong, eligible</td><td><span class="pill p-sage">High</span></td><td><button class="btn btn-xs btn-ghost">Assign support</button></td></tr>
+      <tr><td>Dr Sarah Chen</td><td>NHMRC Investigator — 4 Q1 papers this year</td><td><span class="pill p-amber">Medium</span></td><td><button class="btn btn-xs btn-ghost">Assign support</button></td></tr>
+      <tr><td>Dr Marcus Webb</td><td>ARC Linkage — strong Telstra connection</td><td><span class="pill p-amber">Medium</span></td><td><button class="btn btn-xs btn-ghost">Assign support</button></td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- RO: DISCLOSURE -->
+<div class="page" id="p-disclosure">
+  <div class="ph"><div class="ph-eyebrow">Research Office</div><div class="ph-title">AI disclosure register</div><div class="ph-sub">ARC and NHMRC require AI disclosure for every application from April 2026. Generated automatically — informal tool use can't produce this register.</div></div>
+  <div class="success">8 reports generated this round · export the institutional register for DVC-R review</div>
+  <div class="tbl-wrap"><table class="tbl">
+    <thead><tr><th>Application</th><th>Lead CI</th><th>AI-assisted sections</th><th>Generated</th><th></th></tr></thead>
+    <tbody>
+      <tr><td>Vape &amp; Smoke-Free Program</td><td>Dr Taylor</td><td>ROPE, Project, NIT, Budget</td><td>9 May 2026</td><td><button class="btn btn-xs btn-ghost">PDF</button></td></tr>
+      <tr><td>DECRA 2027</td><td>Dr Nguyen</td><td>ROPE, Project, NIT</td><td>8 May 2026</td><td><button class="btn btn-xs btn-ghost">PDF</button></td></tr>
+      <tr><td>Rural Food Equity Co-CI</td><td>Dr Taylor</td><td>ROPE only</td><td>2 May 2026</td><td><button class="btn btn-xs btn-ghost">PDF</button></td></tr>
+    </tbody>
+  </table></div>
+  <button class="btn btn-primary">Export full 2026 register</button>
+</div>
+
+<!-- RO: MANDATE -->
+<div class="page" id="p-mandate">
+  <div class="ph"><div class="ph-eyebrow">Research Office</div><div class="ph-title">Path to institutional standard</div><div class="ph-sub">One Research Office writing Grantiv into AI governance policy becomes the reference document every other university follows.</div></div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:.4rem">Three steps to lock-in</div>
+    <div class="mandate-step"><div class="ms-num">1</div><div><div class="ms-title">One researcher gets funded using Grantiv</div><div class="ms-desc">Dr Taylor's VicHealth application funds at 31% vs an 18.5% baseline. The Research Office now has a result, not a demo, to take to DVC-R.</div></div></div>
+    <div class="mandate-step"><div class="ms-num">2</div><div><div class="ms-title">Grantiv enters AI governance policy</div><div class="ms-desc">The April 2026 disclosure mandate means every institution needs a policy anyway. Grantiv is the compliant tool — Australian hosting, signed DPA, automatic disclosure. It becomes a procurement decision, not a per-researcher one.</div></div></div>
+    <div class="mandate-step"><div class="ms-num">3</div><div><div class="ms-title">42 universities use the first policy as cover</div><div class="ms-desc">When the first Go8 university publishes, the others reference it to make the same case. The compliance requirement is universal. After the first institution, the policy is the sales team.</div></div></div>
+  </div>
+  <div class="card"><div class="card-title">Sample governance language</div>
+    <div class="out-box" style="font-size:12.5px;min-height:60px;margin-top:.7rem">Section 4.3 — AI Use in Competitive Grant Applications
+
+The University approves Grantiv as the institutional platform for AI-assisted preparation of ARC, NHMRC, and major state/philanthropic grant applications. Use of Grantiv satisfies AI disclosure requirements under ARC/NHMRC guidelines (April 2026) and university data governance obligations, including Australian data hosting and a current Data Processing Agreement.
+
+This policy applies to all ARC Discovery, Linkage, and Future Fellowship applications; all NHMRC Ideas, Investigator, and Synergy grants; and all state government competitive grants above $50,000.</div>
+  </div>
+</div>
+
+</div></div>
+</div>
+
+<script>
+let apiKey=localStorage.getItem('gai5_k')||'';
+function saveKey(){apiKey=document.getElementById('apikey').value;localStorage.setItem('gai5_k',apiKey)}
+function openSettings(){const m=document.getElementById('settings-modal');m.style.display='block';document.getElementById('apikey').value=apiKey}
+function closeSettings(){document.getElementById('settings-modal').style.display='none'}
+
+function animateCounter(el,target,duration){
+  const start=Date.now();
+  const tick=()=>{const e=Date.now()-start;const p=Math.min(e/duration,1);const eased=1-Math.pow(1-p,3);el.textContent=Math.round(eased*target);if(p<1)requestAnimationFrame(tick)};
+  requestAnimationFrame(tick);
+}
+
+function animateMoney(el,target,duration,decimals){
+  const start=Date.now();
+  const tick=()=>{const e=Date.now()-start;const p=Math.min(e/duration,1);const eased=1-Math.pow(1-p,3);el.textContent=(eased*target).toFixed(decimals);if(p<1)requestAnimationFrame(tick)};
+  requestAnimationFrame(tick);
+}
+
+/* landing hero animations */
+(function initLanding(){
+  const m=document.getElementById('lp-money');
+  if(m)animateMoney(m,2.1,1500,1);
+  setTimeout(()=>{const n=document.getElementById('lp-bar-nat'),g=document.getElementById('lp-bar-gr');if(n)n.style.width='68%';if(g)g.style.width='100%';},250);
+})();
+
+let roAnimated=false;
+function animateRoOverview(){
+  if(roAnimated)return;roAnimated=true;
+  const m=document.getElementById('ib-money');if(m)animateMoney(m,2.1,1400,1);
+  setTimeout(()=>{const n=document.getElementById('ib-bar-nat'),g=document.getElementById('ib-bar-gr');if(n)n.style.width='68%';if(g)g.style.width='100%';},200);
+}
+
+function enterDemo(role){
+  const lp=document.getElementById('landing');
+  lp.style.opacity='0';lp.style.transition='opacity .4s';
+  setTimeout(()=>{
+    lp.style.display='none';
+    document.getElementById('main-app').style.display='grid';
+    const a=document.getElementById('hs-num');if(a)animateCounter(a,83,1200);
+    const b=document.getElementById('hs-total');if(b)animateCounter(b,247,1800);
+    if(role==='ci'){switchRole('ci');nav('home');}
+    else{switchRole('ro');nav('ro-home');animateRoOverview();}
+    wireDeadButtons();
+  },380);
+}
+function doLogin(){enterDemo('ro')}
+
+/* ── Toast (replaces alerts + dead clicks) ── */
+function toast(msg){
+  const host=document.getElementById('toast-host');if(!host)return;
+  const t=document.createElement('div');t.className='toast';
+  t.innerHTML='<svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg><span></span>';
+  t.querySelector('span').textContent=msg;
+  host.appendChild(t);
+  setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),250);},2600);
+}
+window.alert=function(m){toast(String(m))};
+
+/* give every otherwise-dead button a believable action */
+function wireDeadButtons(){
+  const map=[
+    ['email bell','Draft email to Prof Bell opened in Mail'],
+    ['load','Loading application from your library…'],
+    ['plan','Opening the strategy planner…'],
+    ['adapt','Adapting reusable sections to this scheme…'],
+    ['assign support','Support assigned — researcher notified'],
+    ['pdf','Generating disclosure PDF…'],
+    ['export full 2026 register','Exporting institutional register (.xlsx)…'],
+    ['download pdf for rms','Generating RMS-ready disclosure PDF…'],
+    ['submit to vichealth','Submitted to the VicHealth portal'],
+    ['edit','Opening the editor…'],
+    ['review','Opening the collaborator\u2019s ROPE…']
+  ];
+  document.querySelectorAll('button.btn').forEach(b=>{
+    if(b.dataset.wired)return;
+    if(b.getAttribute('onclick'))return;            // already does something real
+    b.dataset.wired='1';
+    const txt=(b.textContent||'').trim().toLowerCase();
+    let msg='Available in the full version';
+    for(const [k,v] of map){ if(txt.includes(k)){msg=v;break;} }
+    b.addEventListener('click',e=>{e.stopPropagation();toast(msg);});
+  });
+}
+document.addEventListener('keydown',e=>{const lp=document.getElementById('landing');if(e.key==='Enter'&&lp&&lp.style.display!=='none')enterDemo('ro')});
+
+const GRANTS=[
+  {name:'VicHealth Impact Grant — Health Equity',fit:94,dl:'14 Jun 2026',amt:'Up to $250,000',why:'Co-design methodology and vaping/young-people focus match VicHealth 2026 priorities. 94% overlap with 23 funded projects in your discipline.'},
+  {name:'NHMRC Ideas Grant',fit:81,dl:'30 Jul 2026',amt:'$200K–$500K',why:'Q1 record in tobacco and addiction meets the track-record threshold. Suits a mixed-methods approach.'},
+  {name:'Cancer Council Victoria Research Grant',fit:78,dl:'1 Aug 2026',amt:'Up to $80,000',why:'Existing Cancer Council partnership strengthens this. 5 funded vaping/tobacco projects in corpus.'},
+  {name:'ARC Discovery Project DP28 EOI',fit:67,dl:'1 Oct 2026',amt:'$300K–$600K',why:'ROPE strong enough for a DP. Corpus shows 31% success for similar profiles.'},
+  {name:'Heart Foundation Vanguard Grant',fit:61,dl:'15 Sep 2026',amt:'Up to $75,000',why:'Cardiovascular risk from vaping partially overlaps. Needs a stronger cardiovascular angle.'},
+  {name:'DFAT Indo-Pacific Health Grant',fit:43,dl:'30 Nov 2026',amt:'Up to $200,000',why:'Partial match — requires an Indo-Pacific collaboration not currently in your profile.'}
+];
+
+function discCard(g,fit,extra){
+  const col=fit>=80?'var(--ok)':fit>=60?'var(--accent)':'var(--ink-3)';
+  return `<div class="disc-card" onclick="nav('gonogo')">
+    <div style="display:flex;justify-content:space-between;gap:1rem;align-items:flex-start">
+      <div style="flex:1">
+        <div style="font-size:14.5px;font-weight:600;margin-bottom:.25rem;letter-spacing:-.01em">${g.name}</div>
+        <div style="font-size:12px;color:var(--ink-3);margin-bottom:.35rem">Deadline ${g.dl} · ${g.amt}</div>
+        <div style="font-size:13px;color:var(--ink-2);line-height:1.5">${g.why}</div>${extra||''}
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div class="disc-score tnum" style="color:${col}">${fit}<span style="font-size:13px;color:var(--ink-3);font-weight:450">%</span></div>
+        <div style="font-size:11px;color:var(--ink-3)">fit</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildOrcidDiscovery(){document.getElementById('disc-orcid-list').innerHTML=GRANTS.slice(0,6).map(g=>discCard(g,g.fit)).join('')}
+buildOrcidDiscovery();
+
+function runDiscovery(){
+  const area=document.getElementById('disc-area').value.trim();
+  if(!area){alert('Describe your research area first.');return}
+  const lower=area.toLowerCase();
+  const scored=GRANTS.map(g=>{let b=0;
+    if(lower.includes('vap')&&g.name.toLowerCase().includes('health'))b+=5;
+    if(lower.includes('university')||lower.includes('student'))b+=3;
+    if(lower.includes('policy')&&g.fit>60)b+=4;
+    if(lower.includes('co-design')||lower.includes('community'))b+=3;
+    return {...g,adjustedFit:Math.min(99,g.fit+b)};
+  }).sort((a,b)=>b.adjustedFit-a.adjustedFit);
+  document.getElementById('disc-summary').textContent=scored.length+' opportunities matched · ranked by predicted success for your profile · 2 deadlines within 6 weeks';
+  document.getElementById('disc-list').innerHTML=scored.map(g=>{
+    const extra=`<div style="display:flex;gap:.4rem;margin-top:.6rem"><button class="btn btn-xs btn-ghost" style="margin-left:-.5rem" onclick="event.stopPropagation();nav('gonogo')">Go/no-go →</button><button class="btn btn-xs btn-ghost" onclick="event.stopPropagation();nav('eligibility')">Eligibility →</button></div>`;
+    return discCard(g,g.adjustedFit,extra);
+  }).join('');
+  document.getElementById('disc-results').style.display='block';
+  document.getElementById('disc-orcid-section').style.display='none';
+}
+
+const COMP=[
+  {s:'pass',t:'Project description — page limit',d:'6.8 pages (limit 7). Within limit.'},
+  {s:'pass',t:'Budget justification — page limit',d:'2.9 pages (limit 3). Within limit.'},
+  {s:'warn',t:'Prof Bell — concurrent project limit',d:'Holds 2 active DPs — at the limit. Would cause desk rejection.',fix:'Remove from team OR verify one DP ends before start.'},
+  {s:'pass',t:'NIT readability',d:'Grade 9.1 (target ≤10). Suitable for general public.'},
+  {s:'pass',t:'Budget heading match — D1',d:'All headings aligned.'},
+  {s:'warn',t:'Partner letter — Cancer Council Victoria',d:'Not yet uploaded.',fix:'Upload signed PDF before internal deadline.'},
+  {s:'pass',t:'Medical research scope',d:'No clinical language. Correctly categorised as public health.'},
+  {s:'pass',t:'FoR codes — all CIs',d:'All set in RMS profiles.'},
+  {s:'pass',t:'Conflict of interest',d:'All CIs completed in RMS.'},
+  {s:'pass',t:'AI disclosure report',d:'Generated and attached. Compliant with April 2026 policy.'},
+  {s:'pass',t:'Ethics note',d:'HREC approval noted in methodology.'}
+];
+function runComp(){
+  document.getElementById('comp-items').innerHTML=COMP.map(c=>`
+    <div class="comp-item"><div class="comp-icon ci-${c.s==='pass'?'pass':'warn'}">${c.s==='pass'?'✓':'!'}</div><div><div class="comp-title">${c.t}</div><div class="comp-desc">${c.d}</div>${c.fix?`<div class="comp-fix">Fix: ${c.fix}</div>`:''}</div></div>`).join('');
+  document.getElementById('comp-out').style.display='block';
+}
+
+function showBudget(){document.getElementById('bud-out').style.display='block'}
+
+function addCI(){
+  const d=document.createElement('div');d.className='ci-row';
+  d.innerHTML=`<div class="field" style="margin:0"><label>Name</label><input placeholder="Full name"></div><div class="field" style="margin:0"><label>ORCID</label><input placeholder="ORCID"></div><div class="field" style="margin:0"><label>Active ARC grants</label><input placeholder="e.g. None"></div><div style="padding-top:24px"><button class="btn btn-sm" onclick="this.closest('.ci-row').remove()">✕</button></div>`;
+  document.getElementById('ci-rows').appendChild(d);
+}
+
+function runElig(){
+  const rows=document.querySelectorAll('#ci-rows .ci-row');
+  const tbody=document.querySelector('#elig-out tbody');tbody.innerHTML='';
+  rows.forEach(r=>{
+    const ins=r.querySelectorAll('input');const name=ins[0].value;const grants=(ins[2]?.value||'').toLowerCase();
+    let s,f,a;
+    if(grants.includes('2 active')){s='red';f='2 active DPs — at concurrent limit. Triggers desk rejection.';a='Remove OR verify end dates before start'}
+    else if(grants.includes('1 active')){s='sage';f='1 active project — within limit';a='None'}
+    else{s='sage';f='No current ARC grants';a='None'}
+    const bg=s==='red'?'background:var(--stop-soft)':'';
+    tbody.innerHTML+=`<tr style="${bg}"><td><strong>${name}</strong></td><td><span class="pill p-${s}">${s==='sage'?'✓ Eligible':'✕ Ineligible'}</span></td><td style="font-size:12.5px">${f}</td><td style="font-size:12.5px;color:var(--ink-2)">${a}</td></tr>`;
+  });
+}
+
+function markOutcome(sel){
+  const v=sel.value;if(!v||v==='Mark outcome')return;
+  const pill=sel.previousElementSibling;
+  if(v==='funded'||v==='✓ Funded'){if(pill&&pill.classList){pill.className='pill p-sage';pill.textContent='✓ Funded'}}
+  else{if(pill&&pill.classList){pill.className='pill p-red';pill.textContent='✕ Unsuccessful'}}
+  sel.style.display='none';
+  alert('Outcome recorded and added to the corpus. Your win rate for this scheme recalculates at the end of the round.');
+}
+
+async function callAI(sys,user,outId,btnId,ccId,actsId){
+  const out=document.getElementById(outId);
+  if(!apiKey){out.classList.remove('placeholder');out.textContent='Add your Anthropic API key in Settings (gear, bottom-left) to enable live drafting. Every other screen works without one.';return}
+  const btn=document.getElementById(btnId);const orig=btn?btn.textContent:'';if(btn){btn.disabled=true;btn.textContent='Generating…'}
+  out.classList.remove('placeholder');
+  out.innerHTML='<div class="loading"><div class="spin"></div>Drafting · patterning against corpus…</div>';
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1500,system:sys,messages:[{role:'user',content:user}]})
+    });
+    const d=await r.json();
+    const t=(d.content&&d.content[0]&&d.content[0].text)||('Error: '+JSON.stringify(d));
+    out.textContent=t;
+    if(ccId){const el=document.getElementById(ccId);const c=t.length;el.textContent=c.toLocaleString()+' chars';el.className='out-meta '+(c>4000?'char-over':c>3500?'char-near':'char-ok')}
+    if(actsId)document.getElementById(actsId).style.display='flex';
+  }catch(e){out.textContent='Error: '+e.message}
+  if(btn){btn.disabled=false;btn.textContent=orig}
+}
+
+function genROPE(variant){
+  const int=document.getElementById('rint').value;
+  const intTxt=int==='parental'?'12-month certified parental leave (August 2017–August 2018, Deakin HR verified)':int==='illness'?'illness-related career interruption (certified)':int==='covid'?'COVID-19 impact 2020–2022 (documented)':'no significant interruptions';
+  const sch=document.getElementById('rsch').value;
+  const sys=`You are an expert in Australian competitive research grants writing ROPE sections for ${sch}.
+
+ROPE has two subsections (label each clearly):
+1. Research Opportunity (max 2,000 chars): OPEN with the FTE calculation — PhD year to present, minus interruptions, adjusted for FTE percentage. State total active research years as a number. Then contextualise interruptions: 2-3 sentences, specific certified dates, FTE impact as a percentage, institutional verification noted.
+2. Performance Evidence (max 2,000 chars): LEAD with journal quality — cite Impact Factor and Scimago quartile for top publications FIRST, before output count. Then output volume, then engagement/impact.
+
+Rules: third-person academic prose only, no bullets, no first person. The career interruption requires FTE quantification, not a single clause. ${sch==='VicHealth Impact Grant'?'VicHealth panels reward community engagement and translation.':'ARC panels reward originality and national significance.'} Quality framing before count framing.`;
+  const user=`Generate a complete ROPE for:
+Name: ${document.getElementById('rn').value}
+Role: ${document.getElementById('rr').value}
+PhD: ${document.getElementById('rphd').value}
+FTE history: ${document.getElementById('rfte').value}
+Interruption: ${intTxt}
+Publications: ${document.getElementById('rpubs').value}
+Engagement: ${document.getElementById('rimp').value}
+${variant?'Emphasis: '+variant:''}
+
+Write both subsections as flowing prose. Label "Research Opportunity" and "Performance Evidence".`;
+  callAI(sys,user,'rope-out','rope-btn','rope-cc','rope-acts');
+}
+
+function genProject(){
+  const sch=document.getElementById('psch').value;
+  const sys=`You are an expert in Australian competitive research grants. Write a structured project description for ${sch}.
+Sections in assessment-weighted order: 1. Background and significance 2. Aims and research questions 3. Research design and methodology 4. Innovation and distinctiveness 5. Expected outcomes and impact.
+~1,600 words. ${sch.includes('VicHealth')?'VicHealth: co-design and community engagement prominent — methodology ~30% of total. Show HOW partners participate.':'ARC: originality and national significance lead.'}`;
+  callAI(sys,`Title: ${document.getElementById('pt').value}\nDescription: ${document.getElementById('pd').value}\nAims: ${document.getElementById('pa').value}\nMethodology: ${document.getElementById('pm').value}\n\nWrite the full structured project description.`,'proj-out','proj-btn','proj-cc','proj-acts');
+}
+
+function genNIT(){
+  const sys=`You are an expert in ARC National Interest Test statements for the general Australian public.
+Rules: Grade 9-10 reading level maximum. Structure (flowing prose, no headings): What is it -> Why it matters to Australians -> How Australia benefits. 250-300 words. Active voice, short sentences. Forbidden words: epidemiological, determinants, longitudinal, multivariate, cohort, prevalence, intervention design, behavioural, conceptual, empirical. Test: could this run in ABC News without editing?`;
+  callAI(sys,`Write a National Interest Test for:\n\n${document.getElementById('ni').value}\n\nFlowing prose, no headings, Grade 9-10, 250-300 words.`,'nit-out','nit-btn','nit-cc','nit-acts');
+}
+
+function genRejoinder(){
+  const sys=`You are an expert in ARC grant rejoinders.
+Rules: use ONLY information already in the submitted application — no new data or publications. Tone: professional, constructive. 200-350 words. Submitted application: VicHealth Impact Grant, vaping prevention, Dr Patricia Taylor, 5 Q1 publications including Tobacco Control (IF 7.9), 12-month certified parental leave (2018), 10.2 FTE research years, VicHealth advisory board, Australian Government vaping inquiry advisor.`;
+  callAI(sys,`Assessor comment:\n"${document.getElementById('rc').value}"\n\nDraft the rejoinder using ONLY submitted content.`,'rej-out','rej-btn','rej-cc','rej-acts');
+}
+
+async function runAssessor(){
+  const out=document.getElementById('as-out');
+  if(!apiKey){out.classList.remove('placeholder');out.textContent='Add your Anthropic API key in Settings to enable assessor simulation.';return}
+  const section=document.getElementById('as-section').value;
+  const scheme=document.getElementById('as-scheme').value;
+  const content=document.getElementById('as-content').value;
+  const sys=`You are simulating three expert assessors for ${scheme} grant applications.
+Simulate three assessors reviewing the following ${section}:
+ASSESSOR 1 (Favourable): genuine strengths, specific, 2-3 sentences.
+ASSESSOR 2 (Neutral): strengths and weaknesses, what is adequate but not outstanding, 2-3 sentences.
+ASSESSOR 3 (Critical): the most important. Name the exact phrase or framing issue that scores below the funded threshold. Reference what funded applications do differently. 3-4 sentences.
+OVERALL PANEL SCORE: a score out of 100 and a one-line verdict. Be honest.`;
+  callAI(sys,`${section} to assess:\n\n${content}`,'as-out','as-btn',null,'as-acts');
+  document.getElementById('as-score-meta').textContent='Simulating 3 assessors…';
+}
+
+function copy(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>alert('Copied.'))}
+
+function runGoNoGo(){
+  const scheme=document.getElementById('gng-scheme').value;
+  const q1=parseInt(document.getElementById('gng-q1').value)||0;
+  const pubs=parseInt(document.getElementById('gng-pubs').value)||0;
+  const fte=parseFloat(document.getElementById('gng-fte').value)||0;
+  const grants=parseInt(document.getElementById('gng-grants').value)||0;
+  const partner=document.getElementById('gng-partner').value;
+  const prev=document.getElementById('gng-prev').value;
+
+  const baselines={
+    'VicHealth Impact Grant':{base:18,trackWeight:0.45,projWeight:0.30,envWeight:0.25},
+    'ARC Discovery Project':{base:16,trackWeight:0.55,projWeight:0.25,envWeight:0.20},
+    'NHMRC Ideas Grant':{base:8,trackWeight:0.50,projWeight:0.30,envWeight:0.20},
+    'ARC DECRA':{base:14,trackWeight:0.60,projWeight:0.25,envWeight:0.15},
+    'ARC Future Fellowship':{base:12,trackWeight:0.65,projWeight:0.20,envWeight:0.15},
+    'ARC Linkage Project':{base:20,trackWeight:0.40,projWeight:0.25,envWeight:0.35}
+  };
+  const s=baselines[scheme]||baselines['ARC Discovery Project'];
+
+  let trackScore=0;
+  if(q1>=5)trackScore=90;else if(q1>=3)trackScore=72;else if(q1>=1)trackScore=50;else trackScore=25;
+  if(pubs>=10)trackScore=Math.min(100,trackScore+8);
+  if(fte>=12)trackScore=Math.min(100,trackScore+10);else if(fte<5)trackScore=Math.max(0,trackScore-15);
+  if(grants>=2)trackScore=Math.min(100,trackScore+12);else if(grants===1)trackScore=Math.min(100,trackScore+6);
+
+  let envScore=55;
+  if(partner==='yes')envScore=85;else if(partner==='informal')envScore=62;else envScore=45;
+
+  let projScore=65;
+  if(prev==='1f'){trackScore=Math.min(100,trackScore+8);projScore=Math.min(100,projScore+5)}
+  if(prev==='1u')projScore=Math.max(0,projScore-3);
+  if(prev==='multi')projScore=Math.max(0,projScore-5);
+
+  const weighted=(trackScore*s.trackWeight+projScore*s.projWeight+envScore*s.envWeight);
+  const predicted=Math.round(s.base*(weighted/60));
+  const capped=Math.min(45,Math.max(3,predicted));
+
+  const scoreEl=document.getElementById('gng-score');
+  scoreEl.textContent=capped+'%';
+  scoreEl.style.color=capped>=25?'var(--ok)':capped>=15?'var(--warn)':'var(--stop)';
+  document.getElementById('gng-baseline').textContent='National baseline for '+scheme+': '+s.base+'% · Your profile: '+(capped>s.base?'+'+(capped-s.base)+'%':(capped-s.base)+'%')+' vs average';
+
+  document.getElementById('gng-breakdown').innerHTML=`
+    <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin-bottom:.6rem">Score breakdown</div>
+    ${makeScoreBar('Track record',trackScore,s.trackWeight)}
+    ${makeScoreBar('Project quality',projScore,s.projWeight)}
+    ${makeScoreBar('Research environment',envScore,s.envWeight)}`;
+
+  const pros=[],cons=[];
+  if(q1>=3)pros.push('Strong Q1 publication record ('+q1+' papers) above scheme average');else cons.push('Q1 publication count ('+q1+') below what funded applicants in this scheme typically hold');
+  if(fte>=10)pros.push('FTE years ('+fte+') demonstrates sustained research commitment');else cons.push('Relatively early career stage — competitive for researchers under 10 FTE years');
+  if(grants>=1)pros.push('Prior funded grant establishes CI capability');else cons.push('No prior funded grant as lead CI is the most significant risk factor for this scheme');
+  if(partner==='yes')pros.push('Named partner with signed letter substantially strengthens the environment score');else if(partner==='no')cons.push('No industry or community partner — environment score below the funded average');
+  if(prev==='1f')pros.push('Previous funding success in this scheme is a strong positive signal to assessors');
+  if(prev==='1u')cons.push('One prior unsuccessful application — assessors look for what changed; the revision narrative matters');
+
+  document.getElementById('gng-pros').innerHTML=pros.map(p=>'<div style="margin-bottom:.5rem;display:flex;gap:.4rem"><span style="color:var(--ok)">+</span><span>'+p+'</span></div>').join('')||'<div style="color:var(--ink-3)">No strong positive factors at current profile.</div>';
+  document.getElementById('gng-cons').innerHTML=cons.map(c=>'<div style="margin-bottom:.5rem;display:flex;gap:.4rem"><span style="color:var(--stop)">−</span><span>'+c+'</span></div>').join('')||'<div style="color:var(--ink-3)">No significant negative factors.</div>';
+
+  const grantValue=scheme.includes('VicHealth')?200000:scheme.includes('NHMRC')?350000:scheme.includes('Discovery')?450000:250000;
+  const expectedValue=(capped/100)*grantValue;
+  const hourlyRate=120;
+  const appCost=180*hourlyRate;
+  const grantivCost=12*hourlyRate;
+  const roi=((expectedValue-grantivCost)/grantivCost*100).toFixed(0);
+
+  document.getElementById('gng-roi').innerHTML=`At ${capped}% predicted success, the expected value of this application is <strong>$${(expectedValue/1000).toFixed(0)}K</strong> (${capped}% × $${(grantValue/1000).toFixed(0)}K). At an academic hourly rate of $${hourlyRate}, the 180-hour DIY cost is <strong>$${(appCost/1000).toFixed(0)}K</strong>. Grantiv reduces preparation to ~12 hours, a cost of <strong>$${(grantivCost/1000).toFixed(0)}K</strong>. Expected ROI with Grantiv: <strong>${roi}%</strong>. ${capped<s.base?'Your predicted success is below the scheme baseline — review the factors working against you before investing time.':'Your profile is above the scheme baseline — this application has a positive expected return.'}`;
+
+  const isGo=capped>=s.base*0.85;
+  const rec=document.getElementById('gng-recommendation');
+  rec.style.background=isGo?'var(--ok-soft)':'var(--warn-soft)';
+  rec.style.color=isGo?'var(--ok)':'var(--warn)';
+  rec.textContent=isGo?'Go — your profile is competitive for this scheme. Proceed, and close the specific gaps above before submitting.':'Consider waiting — your profile is below the competitive threshold. The gaps are addressable in 12–24 months. Applying now is a negative expected-value decision.';
+
+  document.getElementById('gng-detail').style.display='block';
+}
+
+function makeScoreBar(label,score,weight){
+  const col=score>=75?'var(--ok)':score>=55?'var(--warn)':'var(--stop)';
+  return `<div style="margin-bottom:.65rem">
+    <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:4px"><span style="color:var(--ink-2)">${label}</span><span class="tnum" style="color:${col};font-weight:500">${score}/100 <span style="color:var(--ink-3);font-weight:400">(${Math.round(weight*100)}%)</span></span></div>
+    <div class="qs-bar" style="margin-bottom:0"><div class="qs-fill" style="width:${score}%;background:${col}"></div></div>
+  </div>`;
+}
+
+function nav(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  const el=document.getElementById('p-'+p);if(el)el.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active',n.getAttribute('data-page')===p));
+  const main=document.querySelector('.main');if(main)main.scrollTop=0;
+  const sb=document.getElementById('sb');if(sb)sb.classList.remove('open');
+  if(p==='ro-home'&&typeof animateRoOverview==='function')animateRoOverview();
+  if(typeof wireDeadButtons==='function')wireDeadButtons();
+}
+
+function switchRole(role){
+  const isCi=role==='ci';
+  document.getElementById('ci-nav').style.display=isCi?'':'none';
+  document.getElementById('ro-nav').style.display=isCi?'none':'';
+  document.getElementById('seg-ci').classList.toggle('on',isCi);
+  document.getElementById('seg-ro').classList.toggle('on',!isCi);
+  nav(isCi?'home':'ro-home');
+}
+</script>
+</body>
+</html>
